@@ -4,8 +4,8 @@ namespace App\Enum;
 
 enum CouleurJour: string
 {
-    case bleu = 'BLEU';
-    case blanc = 'BLANC';
-    case rouge = 'ROUGE';
-    case inconnu = 'INCONNU';
+    case BLEU = 'BLEU';
+    case BLANC = 'BLANC';
+    case ROUGE = 'ROUGE';
+    case INCONNU = 'INCONNU';
 }

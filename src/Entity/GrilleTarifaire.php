@@ -25,16 +25,19 @@ class GrilleTarifaire
     private ?CouleurJour $couleur = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTime $debHC = null;
+    private ?\DateTime $deb = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 4, nullable: true)]
-    private ?string $tarifHC = null;
+    private ?string $tarif = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTime $debHP = null;
+    private ?\DateTime $fin = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 4, nullable: true)]
-    private ?string $tarifHP = null;
+    private ?string $type = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $puissance = null;
 
     public function getId(): ?int
     {
@@ -77,50 +80,62 @@ class GrilleTarifaire
         return $this;
     }
 
-    public function getDebHC(): ?\DateTime
+    public function getDeb(): ?\DateTime
     {
-        return $this->debHC;
+        return $this->deb;
     }
 
-    public function setDebHC(?\DateTime $debHC): static
+    public function setDeb(?\DateTime $deb): static
     {
-        $this->debHC = $debHC;
+        $this->deb = $deb;
 
         return $this;
     }
 
-    public function getTarifHC(): ?string
+    public function getTarif(): ?string
     {
-        return $this->tarifHC;
+        return $this->tarif;
     }
 
-    public function setTarifHC(?string $tarifHC): static
+    public function setTarif(?string $tarif): static
     {
-        $this->tarifHC = $tarifHC;
+        $this->tarif = $tarif;
 
         return $this;
     }
 
-    public function getDebHP(): ?\DateTime
+    public function getFin(): ?\DateTime
     {
-        return $this->debHP;
+        return $this->fin;
     }
 
-    public function setDebHP(?\DateTime $debHP): static
+    public function setFin(?\DateTime $fin): static
     {
-        $this->debHP = $debHP;
+        $this->fin = $fin;
 
         return $this;
     }
 
-    public function getTarifHP(): ?string
+    public function getType(): ?string
     {
         return $this->tarifHP;
     }
 
-    public function setTarifHP(?string $tarifHP): static
+    public function setType(?string $tarifHP): static
     {
         $this->tarifHP = $tarifHP;
+
+        return $this;
+    }
+
+    public function getPuissance(): ?int
+    {
+        return $this->puissance;
+    }
+
+    public function setPuissance(?int $puissance): static
+    {
+        $this->puissance = $puissance;
 
         return $this;
     }
