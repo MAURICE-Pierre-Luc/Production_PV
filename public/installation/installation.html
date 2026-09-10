@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Production solaire - Installation</title>
+
+    <link rel="stylesheet" href="../common/header.css">
+    <link rel="stylesheet" href="installation.css">
+
+    <script src="../common/header.js" defer></script>
+<script src="installation.js" defer></script>
+</head>
+
+<body>
+
+<header id="header"></header>
+
+
+<main class="main-container">
+
+    <!-- Titre -->
+    <section class="page-header">
+        <div>
+            <h1>Mon installation solaire</h1>
+            <p>
+                Vue générale de la production et des performances de l'installation.
+            </p>
+        </div>
+
+        <div class="last-update">
+            Dernière mise à jour :
+            <span id="last-update">--/--/---- --:--</span>
+        </div>
+    </section>
+
+
+    <!-- Statistiques principales -->
+    <section class="stats-grid">
+
+        <article class="stat-card">
+            <h2>Production totale</h2>
+
+            <div class="stat-value">
+                <span id="total-production">---</span>
+                <span class="stat-unit">kWh</span>
+            </div>
+
+            <p class="stat-description">
+                Énergie produite depuis le début de l'installation
+            </p>
+        </article>
+
+
+        <article class="stat-card">
+            <h2>Production cette année</h2>
+
+            <div class="stat-value">
+                <span id="year-production">---</span>
+                <span class="stat-unit">kWh</span>
+            </div>
+
+            <p class="stat-description">
+                Production cumulée sur l'année en cours
+            </p>
+        </article>
+
+
+        <article class="stat-card">
+            <h2>Production maximale</h2>
+
+            <div class="stat-value">
+                <span id="max-production">---</span>
+                <span class="stat-unit">kWh</span>
+            </div>
+
+            <p class="stat-description">
+                Meilleure production journalière enregistrée
+            </p>
+        </article>
+
+
+        <article class="stat-card">
+            <h2>Énergie consommée</h2>
+
+            <div class="stat-value">
+                <span id="total-consumption">---</span>
+                <span class="stat-unit">kWh</span>
+            </div>
+
+            <p class="stat-description">
+                Consommation totale enregistrée
+            </p>
+        </article>
+
+    </section>
+
+
+    <!-- Informations installation -->
+    <section class="section">
+
+        <h2 class="section-title">Informations sur l'installation</h2>
+
+        <div class="information-grid">
+
+            <div class="information-item">
+                <span class="information-label">Puissance installée</span>
+                <span class="information-value">
+                    <span id="installed-power">---</span> kWc
+                </span>
+            </div>
+
+            <div class="information-item">
+                <span class="information-label">Nombre de panneaux</span>
+                <span class="information-value">
+                    <span id="panel-count">---</span>
+                </span>
+            </div>
+
+            <div class="information-item">
+                <span class="information-label">Date de mise en service</span>
+                <span class="information-value">
+                    <span id="installation-date">--/--/----</span>
+                </span>
+            </div>
+
+            <div class="information-item">
+                <span class="information-label">Orientation</span>
+                <span class="information-value">
+                    <span id="orientation">---</span>
+                </span>
+            </div>
+
+            <div class="information-item">
+                <span class="information-label">Inclinaison</span>
+                <span class="information-value">
+                    <span id="inclination">---</span>°
+                </span>
+            </div>
+
+            <div class="information-item">
+                <span class="information-label">Capacité batterie</span>
+                <span class="information-value">
+                    <span id="battery-capacity">---</span> kWh
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Statistiques supplémentaires -->
+    <section class="section">
+
+        <h2 class="section-title">Performances</h2>
+
+        <div class="performance-grid">
+
+            <article class="performance-card">
+                <h3>Autonomie</h3>
+
+                <div class="performance-value">
+                    <span id="self-consumption">---</span> %
+                </div>
+
+                <p>
+                    Part de l'énergie solaire directement consommée.
+                </p>
+            </article>
+
+
+            <article class="performance-card">
+                <h3>Énergie injectée</h3>
+
+                <div class="performance-value">
+                    <span id="energy-exported">---</span> kWh
+                </div>
+
+                <p>
+                    Énergie produite puis injectée sur le réseau.
+                </p>
+            </article>
+
+
+            <article class="performance-card">
+                <h3>Recharge véhicule</h3>
+
+                <div class="performance-value">
+                    <span id="ev-energy">---</span> kWh
+                </div>
+
+                <p>
+                    Énergie utilisée pour la recharge du véhicule électrique.
+                </p>
+            </article>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+
+</body>
+</html>

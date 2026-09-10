@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Production PV - Import</title>
+
+    <link rel="stylesheet" href="../common/header.css">
+    <link rel="stylesheet" href="import.css">
+
+    <script src="../common/header.js" defer></script>
+    <script src="import.js" defer></script>
+
+</head>
+
+<body>
+
+<header id="header"></header>
+
+<main class="main-container">
+
+    <section class="page-header">
+
+        <div>
+            <h1>Import des données</h1>
+
+            <p>
+                Importez un fichier CSV contenant les données de votre installation.
+            </p>
+        </div>
+
+        <a href="../login/login.html" class="logout-button">
+            Se déconnecter
+        </a>
+
+    </section>
+
+
+    <section class="import-card">
+
+        <h2>Déposer un fichier</h2>
+
+        <p class="import-description">
+            Sélectionnez le fichier CSV provenant de votre installation.
+        </p>
+
+
+        <label for="csv-file" class="file-drop-zone">
+
+            <div class="upload-icon">
+                ↑
+            </div>
+
+            <strong>
+                Cliquez pour sélectionner un fichier
+            </strong>
+
+            <span>
+                Format accepté : CSV
+            </span>
+
+        </label>
+
+
+        <input
+            type="file"
+            id="csv-file"
+            accept=".csv,text/csv"
+        >
+
+
+        <div id="selected-file" class="selected-file hidden">
+
+            <div>
+                <span id="file-name" class="file-name">
+                    ---
+                </span>
+
+                <span id="file-size" class="file-size">
+                    ---
+                </span>
+            </div>
+
+            <button id="remove-file" class="remove-button">
+                ×
+            </button>
+
+        </div>
+
+
+        <p id="file-error" class="error-message">
+            Veuillez sélectionner un fichier CSV.
+        </p>
+
+
+        <button id="import-button" class="import-button">
+            Importer les données
+        </button>
+
+
+        <div id="import-status" class="import-status"></div>
+
+    </section>
+
+
+    <section class="history-section">
+
+        <h2>Derniers imports</h2>
+
+        <div class="history-table-container">
+
+            <table class="history-table">
+
+                <thead>
+                    <tr>
+                        <th>Fichier</th>
+                        <th>Date</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td colspan="3" class="empty-history">
+                            Aucun import récent
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Production PV - Connexion</title>
+
+    <link rel="stylesheet" href="../common/header.css">
+    <link rel="stylesheet" href="login.css">
+
+    <script src="../common/header.js" defer></script>
+    <script src="login.js" defer></script>
+
+</head>
+
+<body>
+
+<header id="header"></header>
+
+<main class="main-container">
+
+    <section class="login-section">
+
+        <div class="login-card">
+
+            <h1>Connexion</h1>
+
+            <p>
+                Connectez-vous pour accéder à l'import des données.
+            </p>
+
+            <form id="login-form">
+
+                <div class="form-field">
+                    <label for="username">
+                        Identifiant
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-field">
+                    <label for="password">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                    >
+                </div>
+
+
+                <p id="login-error" class="error-message">
+                    Identifiant ou mot de passe incorrect.
+                </p>
+
+
+                <button type="submit" class="button">
+                    Se connecter
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+</body>
+</html>

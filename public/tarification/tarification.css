@@ -1,0 +1,381 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #f5f6f8;
+    color: #222;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.main-container {
+    width: min(1200px, calc(100% - 40px));
+    margin: 40px auto;
+}
+
+
+/* En-tête */
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+}
+
+.page-header p {
+    margin: 0;
+    color: #666;
+}
+
+
+/* Sélection période */
+
+.period-selector {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+
+    padding: 24px;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+}
+
+.date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.date-field label {
+    color: #666;
+    font-size: 14px;
+}
+
+.date-field input {
+    height: 40px;
+    padding: 0 10px;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    font-size: 14px;
+}
+
+
+.button {
+    height: 40px;
+    padding: 0 25px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #222;
+    color: white;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #444;
+}
+
+
+/* Période */
+
+.selected-period {
+    margin-bottom: 35px;
+
+    color: #666;
+    font-size: 14px;
+}
+
+.selected-period strong {
+    color: #222;
+}
+
+
+/* Sections */
+
+.section {
+    margin-bottom: 45px;
+}
+
+.section-title {
+    margin: 0 0 20px;
+    font-size: 22px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.section-header .section-title {
+    margin: 0;
+}
+
+.section-header span {
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* Tableau tarifaire */
+
+.tariff-table-container {
+    overflow: hidden;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.tariff-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tariff-table th,
+.tariff-table td {
+    padding: 18px 22px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #eee;
+}
+
+.tariff-table th {
+    background-color: #fafafa;
+
+    color: #666;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.tariff-table td {
+    font-size: 15px;
+}
+
+.tariff-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Couleurs Tempo */
+
+.tempo-color {
+    display: inline-block;
+
+    width: 12px;
+    height: 12px;
+
+    margin-right: 8px;
+
+    border-radius: 50%;
+
+    vertical-align: middle;
+}
+
+.tempo-color.blue {
+    background-color: #4385d8;
+}
+
+.tempo-color.white {
+    background-color: #eee;
+
+    border: 1px solid #bbb;
+}
+
+.tempo-color.red {
+    background-color: #d9534f;
+}
+
+
+/* Graphique */
+
+.chart-container {
+    padding: 25px;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.chart-placeholder {
+    display: flex;
+    height: 350px;
+}
+
+.chart-y-axis {
+    width: 70px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding-right: 10px;
+
+    color: #777;
+    font-size: 12px;
+    text-align: right;
+}
+
+.chart-area {
+    position: relative;
+
+    flex: 1;
+
+    border-left: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+}
+
+.chart-grid-line {
+    width: 100%;
+    height: 16.66%;
+
+    border-top: 1px dashed #ddd;
+}
+
+.chart-message {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    color: #999;
+    font-size: 15px;
+}
+
+
+/* Explications Tempo */
+
+.tempo-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.tempo-card {
+    padding: 24px;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.tempo-title {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tempo-card p {
+    margin: 0;
+
+    color: #666;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* Informations */
+
+.information-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+
+    background-color: #ddd;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.information-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding: 22px;
+
+    background-color: white;
+}
+
+.information-label {
+    color: #777;
+    font-size: 14px;
+}
+
+.information-item strong {
+    font-size: 17px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+    .tempo-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .information-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .main-container {
+        width: calc(100% - 24px);
+        margin: 25px auto;
+    }
+
+    .period-selector {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .page-header h1 {
+        font-size: 26px;
+    }
+
+    .tariff-table {
+        font-size: 13px;
+    }
+
+    .tariff-table th,
+    .tariff-table td {
+        padding: 14px 10px;
+    }
+}

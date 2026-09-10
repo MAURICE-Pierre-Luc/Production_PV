@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Production PV - Tarifs</title>
+
+    <link rel="stylesheet" href="../common/header.css">
+    <link rel="stylesheet" href="tarification.css">
+
+    <script src="../common/header.js" defer></script>
+    <script src="tarification.js" defer></script>
+</head>
+
+<body>
+
+<header id="header"></header>
+
+
+<main class="main-container">
+
+    <!-- En-tête -->
+
+    <section class="page-header">
+
+        <h1>Tarifs de l'électricité</h1>
+
+        <p>
+            Consultez l'évolution des tarifs de l'électricité et du tarif Tempo.
+        </p>
+
+    </section>
+
+
+    <!-- Sélection de période -->
+
+    <section class="period-selector">
+
+        <div class="date-field">
+            <label for="start-date">Date de début</label>
+            <input type="date" id="start-date">
+        </div>
+
+        <div class="date-field">
+            <label for="end-date">Date de fin</label>
+            <input type="date" id="end-date">
+        </div>
+
+        <button id="apply-period" class="button">
+            Afficher
+        </button>
+
+    </section>
+
+
+    <!-- Période sélectionnée -->
+
+    <div class="selected-period">
+        Période :
+        <strong id="selected-period">
+            --/--/---- → --/--/----
+        </strong>
+    </div>
+
+
+    <!-- Tarif actuel -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+            Grille tarifaire
+        </h2>
+
+        <div class="tariff-table-container">
+
+            <table class="tariff-table">
+
+                <thead>
+                    <tr>
+                        <th>Couleur</th>
+                        <th>Heures creuses</th>
+                        <th>Heures pleines</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <span class="tempo-color blue"></span>
+                            Bleu
+                        </td>
+
+                        <td>
+                            <span id="blue-hc">---</span> €/kWh
+                        </td>
+
+                        <td>
+                            <span id="blue-hp">---</span> €/kWh
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <span class="tempo-color white"></span>
+                            Blanc
+                        </td>
+
+                        <td>
+                            <span id="white-hc">---</span> €/kWh
+                        </td>
+
+                        <td>
+                            <span id="white-hp">---</span> €/kWh
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <span class="tempo-color red"></span>
+                            Rouge
+                        </td>
+
+                        <td>
+                            <span id="red-hc">---</span> €/kWh
+                        </td>
+
+                        <td>
+                            <span id="red-hp">---</span> €/kWh
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- Évolution -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Évolution des tarifs
+            </h2>
+
+            <span id="chart-period">
+                --/--/---- → --/--/----
+            </span>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <div class="chart-placeholder">
+
+                <div class="chart-y-axis">
+                    <span>1,50 €</span>
+                    <span>1,20 €</span>
+                    <span>0,90 €</span>
+                    <span>0,60 €</span>
+                    <span>0,30 €</span>
+                    <span>0 €</span>
+                </div>
+
+
+                <div class="chart-area">
+
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+                    <div class="chart-grid-line"></div>
+
+                    <div class="chart-message">
+                        Graphique d'évolution des tarifs
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Explication Tempo -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+            Fonctionnement du tarif Tempo
+        </h2>
+
+        <div class="tempo-cards">
+
+            <article class="tempo-card">
+
+                <div class="tempo-title">
+                    <span class="tempo-color blue"></span>
+                    Bleu
+                </div>
+
+                <p>
+                    Tarif appliqué pendant les jours bleus.
+                    Il correspond généralement au tarif le moins élevé.
+                </p>
+
+            </article>
+
+
+            <article class="tempo-card">
+
+                <div class="tempo-title">
+                    <span class="tempo-color white"></span>
+                    Blanc
+                </div>
+
+                <p>
+                    Tarif intermédiaire appliqué pendant les jours blancs.
+                </p>
+
+            </article>
+
+
+            <article class="tempo-card">
+
+                <div class="tempo-title">
+                    <span class="tempo-color red"></span>
+                    Rouge
+                </div>
+
+                <p>
+                    Tarif le plus élevé, appliqué pendant les jours rouges.
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- Informations complémentaires -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+            Informations sur les tarifs
+        </h2>
+
+        <div class="information-grid">
+
+            <div class="information-item">
+
+                <span class="information-label">
+                    Heures creuses
+                </span>
+
+                <strong id="off-peak-hours">
+                    22h00 → 06h00
+                </strong>
+
+            </div>
+
+
+            <div class="information-item">
+
+                <span class="information-label">
+                    Puissance souscrite
+                </span>
+
+                <strong>
+                    <span id="subscribed-power">---</span> kVA
+                </strong>
+
+            </div>
+
+
+            <div class="information-item">
+
+                <span class="information-label">
+                    Dernière mise à jour
+                </span>
+
+                <strong id="last-update">
+                    --/--/----
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+
+</body>
+</html>
