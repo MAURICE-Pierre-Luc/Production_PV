@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\StatutImport;
 use App\Repository\ImportRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +26,9 @@ class Import
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $dateFinDonnees = null;
+
+    #[ORM\Column(enumType: StatutImport::class)]
+    private ?StatutImport $statut = null;
 
     public function getId(): ?int
     {
@@ -75,6 +79,18 @@ class Import
     public function setDateFinDonnees(?\DateTime $dateFinDonnees): static
     {
         $this->dateFinDonnees = $dateFinDonnees;
+
+        return $this;
+    }
+
+    public function getStatut(): ?StatutImport
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(StatutImport $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }
