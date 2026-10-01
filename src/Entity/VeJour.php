@@ -20,9 +20,6 @@ class VeJour
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
     private ?string $energieHP = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $dureeChargeMinutes = null;
-
     public function getJour(): ?Jour
     {
         return $this->jour;
@@ -59,15 +56,4 @@ class VeJour
         return $this;
     }
 
-    public function getDureeChargeMinutes(): ?int
-    {
-        return $this->dureeChargeMinutes;
-    }
-
-    public function setDureeChargeMinutes(?int $dureeChargeMinutes): static
-    {
-        $this->dureeChargeMinutes = $dureeChargeMinutes;
-
-        return $this;
-    }
 }
