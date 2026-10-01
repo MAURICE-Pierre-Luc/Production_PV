@@ -15,9 +15,6 @@ class BatterieJour
     private ?Jour $jour = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
-    private ?string $socMoyen = null;
-
-    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
     private ?string $socMin = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
@@ -43,18 +40,6 @@ class BatterieJour
     public function setJour(?Jour $jour): static
     {
         $this->jour = $jour;
-
-        return $this;
-    }
-
-    public function getSocMoyen(): ?string
-    {
-        return $this->socMoyen;
-    }
-
-    public function setSocMoyen(?string $socMoyen): static
-    {
-        $this->socMoyen = $socMoyen;
 
         return $this;
     }
