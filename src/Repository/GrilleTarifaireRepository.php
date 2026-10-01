@@ -40,4 +40,16 @@ class GrilleTarifaireRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function trouverPlagesHoraires(\DateTimeInterface $date): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('g.deb, g.fin, g.type')
+            ->andWhere('g.dateDebut <= :date')
+            ->andWhere('(g.dateFin IS NULL OR g.dateFin >= :date)')
+            ->setParameter('date', $date)
+            ->orderBy('g.deb', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

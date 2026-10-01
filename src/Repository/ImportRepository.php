@@ -40,4 +40,14 @@ class ImportRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function trouverNomFichier(int $importId): ?string
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i.nomFichier')
+            ->andWhere('i.id = :id')
+            ->setParameter('id', $importId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
