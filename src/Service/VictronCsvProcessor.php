@@ -39,6 +39,10 @@ class VictronCsvProcessor
 
     private ?\DateTimeImmutable $previousTimestamp = null;
 
+    private ?\DateTimeImmutable $dateDebut = null;
+
+    private ?\DateTimeImmutable $dateFin = null;
+
     private ?\DateTimeZone $fuseau = null;
 
     private array $donneesJour;
@@ -241,7 +245,7 @@ class VictronCsvProcessor
     }
 
 
-    public function traiterCSV(int $importId): void {
+    public function traiterCSV(int $importId): array {
         
         $fichier = fopen($this->getFilePath($importId), 'r');
 
@@ -288,11 +292,15 @@ class VictronCsvProcessor
             }
 
             $this->currentDate = $timestamp->format('Y-m-d');
+            $this->dateFin = $this->currentDate;
 
             $heure = $timestamp->format('H:i:s');
 
             if ($this->previousDate === null) {
 
+            if($this->dateDebut === null){
+                $this->dateDebut = $this->currentDate;
+            }
                 $this->previousDate = $this->currentDate;
 
                 $this->plagesHoraires = $this->getPlagesHoraires($this->currentDate);
@@ -345,6 +353,11 @@ class VictronCsvProcessor
         $this->sauvegarderJour();
 
         fclose($fichier);
+
+        return [
+            'dateDebut' => $dateDebut,
+            'dateFin' => $dateFin,
+        ];
     }
 
     private function traiterProduction(string $source, float $valeur, ?string $typeHeure): void{
