@@ -32,9 +32,6 @@ class ProcessImportHandler
         try {
             // L'import commence
             $import->setStatut(StatutImport::EN_COURS);
-            $import->setDateDebutDonnees(
-                // à adapter selon ce que représente ce champ
-            );
 
             $this->entityManager->flush();
 

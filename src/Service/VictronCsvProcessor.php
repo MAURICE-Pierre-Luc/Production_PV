@@ -190,11 +190,7 @@ class VictronCsvProcessor
 
     private function getFilePath(int $importId): string{
         
-        $nomFichier = $this->importRepository->trouverNomFichier($importId);
-
-        $nomFichier = $this->projectDir . '/var/imports/' . $importId . '_' . $nomFichier;
-
-        return $nomFichier;
+        return $this->projectDir . '/var/imports/' . $importId . '.csv';
     }
 
     private function getPlagesHoraires($date): array{
