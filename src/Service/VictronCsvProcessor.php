@@ -294,9 +294,10 @@ class VictronCsvProcessor
 
             if ($this->previousDate === null) {
 
-            if($this->dateDebut === null){
-                $this->dateDebut = $this->currentDate;
-            }
+                if($this->dateDebut === null){
+                    $this->dateDebut = $this->currentDate;
+                }
+                
                 $this->previousDate = $this->currentDate;
 
                 $this->plagesHoraires = $this->getPlagesHoraires($this->currentDate);
@@ -512,93 +513,107 @@ class VictronCsvProcessor
     private function sauvegarderJour(): void{
         $date = \DateTime::createFromFormat('Y-m-d', $this->previousDate);
 
-        $jour = $this->jourRepository->find($date);
-
-        if ($jour === null) {
+        if ($date === false) {
             throw new \RuntimeException(
-                'Le jour ' . $this->previousDate . ' n\'existe pas dans la BDD.'
+                'Date invalide : ' . $this->previousDate
             );
         }
 
-        // Production
-        $productionJour = new ProductionJour();
-        $productionJour->setJour($jour);
-        $productionJour->setEnergieHC(
-            (string) $this->donneesJour['production']['energie_prod_hc']
+        $jour = new Jour();
+        $jour->setDateJour($date);
+
+        // Production solaire
+        $jour->setProductionEnergieHC(
+            $this->donneesJour['production']['energie_prod_hc'] !== null
+                ? (string) $this->donneesJour['production']['energie_prod_hc']
+                : null
         );
-        $productionJour->setEnergieHP(
-            (string) $this->donneesJour['production']['energie_prod_hp']
+
+        $jour->setProductionEnergieHP(
+            $this->donneesJour['production']['energie_prod_hp'] !== null
+                ? (string) $this->donneesJour['production']['energie_prod_hp']
+                : null
         );
-        $productionJour->setPuissanceMax(
-            (string) $this->donneesJour['production']['puissance_max']
+
+        $jour->setProductionPuissanceMax(
+            $this->donneesJour['production']['puissance_max'] !== null
+                ? (string) $this->donneesJour['production']['puissance_max']
+                : null
         );
 
         if ($this->donneesJour['production']['heure_puissance_max'] !== null) {
-            $productionJour->setHeurePuissanceMax(
-                \DateTime::createFromFormat(
-                    'H:i:s',
-                    $this->donneesJour['production']['heure_puissance_max']
-                )
+            $heure = \DateTime::createFromFormat(
+                '!H:i:s',
+                $this->donneesJour['production']['heure_puissance_max']
             );
+
+            if ($heure !== false) {
+                $jour->setProductionHeurePuissanceMax($heure);
+            }
         }
 
-        // Consommation
-        $consommationJour = new ConsommationJour();
-        $consommationJour->setJour($jour);
-        $consommationJour->setEnergieImporteeHC(
-            (string) $this->donneesJour['consommation']['energie_importe_hc']
+        // Consommation du réseau
+        $jour->setEnergieImporteeHC(
+            $this->donneesJour['consommation']['energie_importe_hc'] !== null
+                ? (string) $this->donneesJour['consommation']['energie_importe_hc']
+                : null
         );
-        $consommationJour->setEnergieImporteeHP(
-            (string) $this->donneesJour['consommation']['energie_importe_hp']
+
+        $jour->setEnergieImporteeHP(
+            $this->donneesJour['consommation']['energie_importe_hp'] !== null
+                ? (string) $this->donneesJour['consommation']['energie_importe_hp']
+                : null
         );
 
         // Batterie
-        $batterieJour = new BatterieJour();
-        $batterieJour->setJour($jour);
-        $batterieJour->setSocMin(
+        $jour->setSocMin(
             $this->donneesJour['batterie']['soc_min'] !== null
                 ? (string) $this->donneesJour['batterie']['soc_min']
                 : null
         );
-        $batterieJour->setSocMax(
+
+        $jour->setSocMax(
             $this->donneesJour['batterie']['soc_max'] !== null
                 ? (string) $this->donneesJour['batterie']['soc_max']
                 : null
         );
-        $batterieJour->setSoh(
+
+        $jour->setSoh(
             $this->donneesJour['batterie']['soh'] !== null
                 ? (string) $this->donneesJour['batterie']['soh']
                 : null
         );
-        $batterieJour->setTemperatureMin(
+
+        $jour->setTemperatureMin(
             $this->donneesJour['batterie']['temp_min'] !== null
                 ? (string) $this->donneesJour['batterie']['temp_min']
                 : null
         );
-        $batterieJour->setTemperatureMax(
+
+        $jour->setTemperatureMax(
             $this->donneesJour['batterie']['temp_max'] !== null
                 ? (string) $this->donneesJour['batterie']['temp_max']
                 : null
         );
-        $batterieJour->setNbAlarmes(
+
+        $jour->setNbAlarmes(
             $this->donneesJour['batterie']['nb_alarmes']
         );
 
-        // VE
-        $veJour = new VeJour();
-        $veJour->setJour($jour);
-        $veJour->setEnergieHC(
-            (string) $this->donneesJour['ve']['energie_hc']
-        );
-        $veJour->setEnergieHP(
-            (string) $this->donneesJour['ve']['energie_hp']
+        // Recharge du véhicule électrique
+        $jour->setVeEnergieHC(
+            $this->donneesJour['ve']['energie_hc'] !== null
+                ? (string) $this->donneesJour['ve']['energie_hc']
+                : null
         );
 
-        $this->entityManager->persist($productionJour);
-        $this->entityManager->persist($consommationJour);
-        $this->entityManager->persist($batterieJour);
-        $this->entityManager->persist($veJour);
+        $jour->setVeEnergieHP(
+            $this->donneesJour['ve']['energie_hp'] !== null
+                ? (string) $this->donneesJour['ve']['energie_hp']
+                : null
+        );
 
+        $this->entityManager->persist($jour);
         $this->entityManager->flush();
         $this->entityManager->clear();
     }
