@@ -28,11 +28,11 @@ class GrilleTarifaire
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $deb = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 4, nullable: true)]
-    private ?string $tarif = null;
-
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $fin = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 4, nullable: true)]
+    private ?string $tarif = null;
 
     #[ORM\Column(length: 10, enumType: TypeHoraire::class)]
     private ?TypeHoraire $type = null;
@@ -93,6 +93,13 @@ class GrilleTarifaire
         return $this;
     }
 
+    public function setFin(?\DateTime $fin): static
+    {
+        $this->fin = $fin;
+
+        return $this;
+    }
+
     public function getTarif(): ?string
     {
         return $this->tarif;
@@ -108,13 +115,6 @@ class GrilleTarifaire
     public function getFin(): ?\DateTime
     {
         return $this->fin;
-    }
-
-    public function setFin(?\DateTime $fin): static
-    {
-        $this->fin = $fin;
-
-        return $this;
     }
 
     public function getType(): ?TypeHoraire
