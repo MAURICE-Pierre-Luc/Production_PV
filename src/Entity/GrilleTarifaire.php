@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\CouleurJour;
+use App\Enum\TypeHoraire;
 use App\Repository\GrilleTarifaireRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,8 +34,8 @@ class GrilleTarifaire
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $fin = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 4, nullable: true)]
-    private ?string $type = null;
+    #[ORM\Column(length: 10, enumType: TypeHoraire::class)]
+    private ?TypeHoraire $type = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $puissance = null;
@@ -116,14 +117,14 @@ class GrilleTarifaire
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): ?TypeHoraire
     {
-        return $this->tarifHP;
+        return $this->type;
     }
 
-    public function setType(?string $tarifHP): static
+    public function setType(TypeHoraire $type): static
     {
-        $this->tarifHP = $tarifHP;
+        $this->type = $type;
 
         return $this;
     }
