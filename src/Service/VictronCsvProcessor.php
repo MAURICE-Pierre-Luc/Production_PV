@@ -190,6 +190,23 @@ class VictronCsvProcessor
         ];
     }
 
+    private function resetEtat(): void{
+        $this->previousDate = null;
+        $this->currentDate = null;
+        $this->currentHourtype = null;
+        $this->puissanceAc = null;
+        $this->puissanceDc = null;
+        $this->previousUserYield = null;
+        $this->previousL1Energy = null;
+        $this->previousGridPower = null;
+        $this->previousForwardEnergy = null;
+        $this->previousTimestamp = null;
+        $this->dateDebut = null;
+        $this->dateFin = null;
+        $this->plagesHoraires = [];
+        $this->donneesJour = $this->resetDonnesJour();
+    }
+
     private function getFilePath(int $importId): string{
         
         return $this->projectDir . '/var/imports/' . $importId . '.csv';
@@ -242,22 +259,18 @@ class VictronCsvProcessor
 
     }
 
-
-    public function trouverParDate(\DateTimeInterface $date): ?Jour{
-        return $this->createQueryBuilder('j')
-            ->andWhere('j.dateJour = :date')
-            ->setParameter('date', $date->format('Y-m-d'))
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-
     public function traiterCSV(int $importId): array {
-        
-        $fichier = fopen($this->getFilePath($importId), 'r');
 
-        if ($fichier === false) { 
-            throw new \RuntimeException('Impossible d\'ouvrir le fichier CSV.'); 
+        $chemin = $this->getFilePath($importId);
+
+        if (!is_readable($chemin)) {
+            throw new \RuntimeException('Impossible d\'ouvrir le fichier CSV.');
+        }
+
+        $fichier = fopen($chemin, 'r');
+
+        if ($fichier === false) {
+            throw new \RuntimeException('Impossible d\'ouvrir le fichier CSV.');
         }
 
         $sources = fgetcsv($fichier); // On charge la ligne des sources de meusure des données
@@ -283,7 +296,7 @@ class VictronCsvProcessor
 
         fgetcsv($fichier); // On saute la ligne avec les unités
 
-
+        $this->resetEtat();
 
         $indexHorodatage = 0 ;
         
@@ -317,7 +330,7 @@ class VictronCsvProcessor
 
                 $this->sauvegarderJour();
 
-                $this->donneesJour = $this->resetDonnesJour();
+                $this->resetEtat();
 
                 $this->previousDate = $this->currentDate;
 
@@ -358,7 +371,9 @@ class VictronCsvProcessor
             }
         }
 
-        $this->sauvegarderJour();
+        if ($this->previousDate !== null) {
+            $this->sauvegarderJour();
+        }
 
         fclose($fichier);
 
@@ -522,6 +537,7 @@ class VictronCsvProcessor
     }
 
     private function sauvegarderJour(): void{
+
         $date = \DateTime::createFromFormat('!Y-m-d', $this->previousDate);
 
         if ($date === false) {
@@ -530,7 +546,7 @@ class VictronCsvProcessor
             );
         }
 
-        $jour = $this->jourRepository->trouverParDate($date);
+        $jour = $this->entityManager->find(Jour::class, $date);
 
         if ($jour === null) {
             $jour = new Jour();
@@ -628,8 +644,11 @@ class VictronCsvProcessor
                 : null
         );
 
+        error_log(sprintf('Sauvegarde %s : %s', $this->previousDate, $jour->getDateJour() ? 'existant ou nouveau' : '?'));
+
         $this->entityManager->persist($jour);
         $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 
 }
