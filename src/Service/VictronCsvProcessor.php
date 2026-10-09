@@ -546,7 +546,12 @@ class VictronCsvProcessor
             );
         }
 
-        $jour = $this->entityManager->find(Jour::class, $date);
+        $jour = $this->entityManager
+            ->createQuery('SELECT j FROM App\Entity\Jour j WHERE j.dateJour = :d')
+            ->setParameter('d', $date, \Doctrine\DBAL\Types\Types::DATE_MUTABLE)
+            ->getOneOrNullResult();
+
+        error_log(sprintf('[import] jour=%s existant=%s', $date->format('Y-m-d'), $jour ? 'oui' : 'non'));
 
         if ($jour === null) {
             $jour = new Jour();
@@ -648,7 +653,6 @@ class VictronCsvProcessor
 
         $this->entityManager->persist($jour);
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 
 }
