@@ -519,7 +519,7 @@ class VictronCsvProcessor
             );
         }
 
-        $jour = $this->entityManager->find(Jour::class, $date);
+        $jour = $this->entityManager->find(Jour::class, $this->previousDate);
 
         if ($jour === null) {
             $jour = new Jour();
