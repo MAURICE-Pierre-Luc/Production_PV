@@ -25,9 +25,18 @@ class ImportController extends AbstractController
         $fichier = $request->files->get('file');
 
         // Vérification de la présence du fichier
-        if (!$fichier instanceof UploadedFile || !$fichier->isValid()) {
+        if (!$fichier instanceof UploadedFile) {
             return $this->json([
-                'error' => 'Aucun fichier valide fourni.'
+                'error' => 'Le fichier n’a pas été récupéré comme UploadedFile.',
+                'type' => get_debug_type($fichier),
+            ], 400);
+        }
+
+        if (!$fichier->isValid()) {
+            return $this->json([
+                'error' => 'Erreur lors du téléversement.',
+                'uploadErrorCode' => $fichier->getError(),
+                'uploadErrorMessage' => $fichier->getErrorMessage(),
             ], 400);
         }
 
