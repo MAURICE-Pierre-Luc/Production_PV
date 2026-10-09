@@ -19,9 +19,9 @@ class VictronCsvProcessor
 
     private string $projectDir;
 
-    private ?string $previousDate = null;
+    private ?\DateTimeImmutable $previousDate = null;
 
-    private ?string $currentDate = null;
+    private ?\DateTimeImmutable $currentDate = null;
 
     private ?string $currentHourtype = null;
 
