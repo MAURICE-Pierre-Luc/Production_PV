@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Jour
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $dateJour = null;
 
@@ -66,6 +70,12 @@ class Jour
 
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
     private ?string $veEnergieHP = null;
+
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getDateJour(): ?\DateTime
     {
