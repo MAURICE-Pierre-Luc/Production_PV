@@ -519,8 +519,12 @@ class VictronCsvProcessor
             );
         }
 
-        $jour = new Jour();
-        $jour->setDateJour($date);
+        $jour = $this->entityManager->find(Jour::class, $date);
+
+        if ($jour === null) {
+            $jour = new Jour();
+            $jour->setDateJour($date);
+        }
 
         // Production solaire
         $jour->setProductionEnergieHC(
@@ -615,7 +619,6 @@ class VictronCsvProcessor
 
         $this->entityManager->persist($jour);
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 
 }
