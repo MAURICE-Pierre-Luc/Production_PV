@@ -24,11 +24,30 @@ class ImportController extends AbstractController
     ): JsonResponse {
         $fichier = $request->files->get('file');
 
+        /////////
+        dump($request->headers->get('content-type'));
+        dump($request->request->all());
+        dump($request->files->all());
+        ////////
+
         // Vérification de la présence du fichier
+        
         if (!$fichier instanceof UploadedFile) {
             return $this->json([
-                'error' => 'Le fichier n’a pas été récupéré comme UploadedFile.',
-                'type' => get_debug_type($fichier),
+                'contentType' => $request->headers->get('content-type'),
+                'contentLength' => $request->headers->get('content-length'),
+                'requestKeys' => array_keys($request->request->all()),
+                'fileKeys' => array_keys($request->files->all()),
+                'phpFiles' => array_map(
+                    static fn ($f) => [
+                        'name' => $f['name'] ?? null,
+                        'error' => $f['error'] ?? null,
+                        'size' => $f['size'] ?? null,
+                    ],
+                    $_FILES
+                ),
+                'postMaxSize' => ini_get('post_max_size'),
+                'uploadMaxFilesize' => ini_get('upload_max_filesize'),
             ], 400);
         }
 
