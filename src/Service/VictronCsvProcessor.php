@@ -19,9 +19,9 @@ class VictronCsvProcessor
 
     private string $projectDir;
 
-    private ?\DateTimeImmutable $previousDate = null;
+    private ?string $previousDate = null;
 
-    private ?\DateTimeImmutable $currentDate = null;
+    private ?string $currentDate = null;
 
     private ?string $currentHourtype = null;
 
@@ -288,15 +288,15 @@ class VictronCsvProcessor
             }
 
             $this->currentDate = $timestamp->format('Y-m-d');
-            $this->dateFin = $this->currentDate;
+            $this->dateFin = $timestamp;
+
+            if ($this->dateDebut === null) {
+                $this->dateDebut = $timestamp;
+            }
 
             $heure = $timestamp->format('H:i:s');
 
             if ($this->previousDate === null) {
-
-                if($this->dateDebut === null){
-                    $this->dateDebut = $this->currentDate;
-                }
                 
                 $this->previousDate = $this->currentDate;
 
@@ -352,8 +352,8 @@ class VictronCsvProcessor
         fclose($fichier);
 
         return [
-            'dateDebut' => $dateDebut,
-            'dateFin' => $dateFin,
+            'dateDebut' => $this->dateDebut,
+            'dateFin' => $this->dateFin,
         ];
     }
 
