@@ -45,12 +45,14 @@ class ProcessImportHandler
             $import->setStatut(StatutImport::TERMINE);
 
             $this->entityManager->flush();
+            $this->entityManager->clear();
 
         } catch (\Throwable $e) {
 
             $import->setStatut(StatutImport::ERREUR);
 
             $this->entityManager->flush();
+            $this->entityManager->clear();
 
             throw $e;
         }
