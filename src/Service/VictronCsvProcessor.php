@@ -545,6 +545,10 @@ class VictronCsvProcessor
                 'Date invalide : ' . $this->previousDate
             );
         }
+        $id = $this->entityManager
+            ->createQuery('SELECT j.id FROM App\Entity\Jour j WHERE j.dateJour = :d')
+            ->setParameter('d', $date, \Doctrine\DBAL\Types\Types::DATE_MUTABLE)
+            ->getOneOrNullResult();
 
         $jour = $this->entityManager
             ->createQuery('SELECT j FROM App\Entity\Jour j WHERE j.dateJour = :d')
