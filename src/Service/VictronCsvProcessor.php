@@ -39,7 +39,7 @@ class VictronCsvProcessor
 
     private ?float $previousForwardEnergy = null;
 
-    private ?\DateTimeImmutable $previousTimestamp = null;
+    private ?\DateTime $previousTimestamp = null;
 
     private ?\DateTime $dateDebut = null;
 
@@ -227,7 +227,7 @@ class VictronCsvProcessor
         return 'HP';
     }
 
-    private function extractDateTime(array $ligne, int $indexHorodatage): ?\DateTimeImmutable {
+    private function extractDateTime(array $ligne, int $indexHorodatage): ?\DateTime {
 
         $horodatage = $ligne[$indexHorodatage] ?? null;
 
@@ -442,7 +442,7 @@ class VictronCsvProcessor
         }
     }
 
-    private function traiterConsommation(float $puissance, \DateTimeImmutable $timestamp, ?string $typeHeure): void{
+    private function traiterConsommation(float $puissance, \DateTime $timestamp, ?string $typeHeure): void{
 
         if ($this->previousGridPower !== null && $this->previousTimestamp !== null) {
 
