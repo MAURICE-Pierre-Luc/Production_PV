@@ -237,7 +237,7 @@ class VictronCsvProcessor
 
         $this->fuseau ??= new \DateTimeZone('Europe/Paris');
 
-        return \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $horodatage, $this->fuseau) ?: null;
+        return \DateTime::createFromFormat('Y-m-d H:i:s', $horodatage, $this->fuseau) ?: null;
     }
 
     private function getColonnesIndex(array $sources, array $mesures): array{
