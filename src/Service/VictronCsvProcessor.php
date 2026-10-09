@@ -330,7 +330,7 @@ class VictronCsvProcessor
 
                 $this->sauvegarderJour();
 
-                $this->resetEtat();
+                $this->resetDonnesJour();
 
                 $this->previousDate = $this->currentDate;
 
@@ -652,8 +652,6 @@ class VictronCsvProcessor
                 ? (string) $this->donneesJour['ve']['energie_hp']
                 : null
         );
-
-        error_log(sprintf('Sauvegarde %s : %s', $this->previousDate, $jour->getDateJour() ? 'existant ou nouveau' : '?'));
 
         $this->entityManager->persist($jour);
         $this->entityManager->flush();
