@@ -193,7 +193,7 @@ class VictronCsvProcessor
         return $this->projectDir . '/var/imports/' . $importId . '.csv';
     }
 
-    private function getPlagesHoraires($date): array{
+    private function getPlagesHoraires(string $date): array{
 
         return $this->grilleTarifaireRepository->trouverPlagesHoraires(new \DateTimeImmutable($date));
     }
@@ -511,7 +511,7 @@ class VictronCsvProcessor
     }
 
     private function sauvegarderJour(): void{
-        $date = \DateTime::createFromFormat('Y-m-d', $this->previousDate);
+        $date = \DateTime::createFromFormat('!Y-m-d', $this->previousDate);
 
         if ($date === false) {
             throw new \RuntimeException(
