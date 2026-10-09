@@ -195,7 +195,7 @@ class VictronCsvProcessor
 
     private function getPlagesHoraires($date): array{
 
-        return $this->grilleTarifaireRepository->trouverPlagesHoraires($date);
+        return $this->grilleTarifaireRepository->trouverPlagesHoraires(new \DateTimeImmutable($date));
     }
 
     private function getHourType ($plages, $heure): string{
@@ -520,7 +520,7 @@ class VictronCsvProcessor
         }
 
         $jour = new Jour();
-        $jour->setDateJour($date);
+        $jour->setDateJour(new \DateTime($date));
 
         // Production solaire
         $jour->setProductionEnergieHC(
