@@ -41,9 +41,9 @@ class VictronCsvProcessor
 
     private ?\DateTimeImmutable $previousTimestamp = null;
 
-    private ?\DateTimeImmutable $dateDebut = null;
+    private ?\DateTime $dateDebut = null;
 
-    private ?\DateTimeImmutable $dateFin = null;
+    private ?\DateTime $dateFin = null;
 
     private ?\DateTimeZone $fuseau = null;
 
