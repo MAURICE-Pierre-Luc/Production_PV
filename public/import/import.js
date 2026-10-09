@@ -3,10 +3,21 @@
  */
 
 if (sessionStorage.getItem("loggedIn") !== "true") {
-
     window.location.href = "../login/login.html";
 }
 
+
+/*
+ * Configuration de l'API
+ */
+
+// À adapter si la route de ton ImportController est différente.
+const API_URL = "/api/import";
+
+
+/*
+ * Éléments HTML
+ */
 
 const csvFile = document.getElementById("csv-file");
 
@@ -26,7 +37,6 @@ const importStatus = document.getElementById("import-status");
  */
 
 csvFile.addEventListener("change", function () {
-
     const file = csvFile.files[0];
 
     if (!file) {
@@ -34,23 +44,16 @@ csvFile.addEventListener("change", function () {
         return;
     }
 
-
-    /*
-     * Vérification de l'extension.
-     */
-
+    // Vérification de l'extension
     if (!file.name.toLowerCase().endsWith(".csv")) {
-
         resetFile();
 
         fileError.textContent =
             "Veuillez sélectionner un fichier CSV.";
 
         fileError.classList.add("visible");
-
         return;
     }
-
 
     fileError.classList.remove("visible");
 
@@ -58,6 +61,9 @@ csvFile.addEventListener("change", function () {
     fileSize.textContent = formatFileSize(file.size);
 
     selectedFile.classList.remove("hidden");
+
+    importStatus.classList.remove("visible");
+    importStatus.textContent = "";
 });
 
 
@@ -71,7 +77,6 @@ removeFileButton.addEventListener("click", function () {
 
 
 function resetFile() {
-
     csvFile.value = "";
 
     selectedFile.classList.add("hidden");
@@ -83,6 +88,8 @@ function resetFile() {
 
     importStatus.classList.remove("visible");
     importStatus.textContent = "";
+
+    importButton.disabled = false;
 }
 
 
@@ -91,7 +98,6 @@ function resetFile() {
  */
 
 function formatFileSize(size) {
-
     if (size < 1024) {
         return `${size} octets`;
     }
@@ -105,44 +111,88 @@ function formatFileSize(size) {
 
 
 /*
- * Import
+ * Import du CSV
  */
 
-importButton.addEventListener("click", function () {
-
+importButton.addEventListener("click", async function () {
     const file = csvFile.files[0];
 
-
     if (!file) {
-
         fileError.textContent =
             "Veuillez sélectionner un fichier CSV.";
 
         fileError.classList.add("visible");
-
         return;
     }
 
+    if (!file.name.toLowerCase().endsWith(".csv")) {
+        fileError.textContent =
+            "Veuillez sélectionner un fichier CSV.";
+
+        fileError.classList.add("visible");
+        return;
+    }
 
     fileError.classList.remove("visible");
 
-
-    /*
-     * Pour le moment, aucune requête n'est envoyée.
-     *
-     * Plus tard, ici on enverra le fichier à Symfony :
-     *
-     * const formData = new FormData();
-     * formData.append("file", file);
-     *
-     * fetch("/api/import", {
-     *     method: "POST",
-     *     body: formData
-     * });
-     */
+    // Empêche les doubles envois pendant la requête.
+    importButton.disabled = true;
 
     importStatus.textContent =
-        "Le fichier est prêt à être envoyé au serveur.";
+        "Envoi du fichier au serveur en cours...";
 
     importStatus.classList.add("visible");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
+        });
+
+        // Lecture de la réponse JSON de Symfony.
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+
+        // Symfony a accepté la demande d'import.
+        importStatus.textContent =
+            resultat.message
+            || "Le fichier a été envoyé. Le traitement est en attente.";
+
+        if (resultat.importId !== undefined) {
+            importStatus.textContent +=
+                ` Identifiant de l'import : ${resultat.importId}.`;
+        }
+
+        importStatus.classList.add("visible");
+
+        // Le fichier a été envoyé : on peut le retirer de l'interface.
+        csvFile.value = "";
+        selectedFile.classList.add("hidden");
+
+        fileName.textContent = "---";
+        fileSize.textContent = "---";
+
+    } catch (error) {
+        console.error("Erreur lors de l'import :", error);
+
+        importStatus.textContent =
+            `Échec de l'import : ${error.message}`;
+
+        importStatus.classList.add("visible");
+
+    } finally {
+        importButton.disabled = false;
+    }
 });
+
+
