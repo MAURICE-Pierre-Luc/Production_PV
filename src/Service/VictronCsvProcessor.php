@@ -520,7 +520,7 @@ class VictronCsvProcessor
         }
 
         $jour = new Jour();
-        $jour->setDateJour(new \DateTime($date));
+        $jour->setDateJour($date);
 
         // Production solaire
         $jour->setProductionEnergieHC(
