@@ -24,38 +24,10 @@ class ImportController extends AbstractController
     ): JsonResponse {
         $fichier = $request->files->get('file');
 
-        /////////
-        dump($request->headers->get('content-type'));
-        dump($request->request->all());
-        dump($request->files->all());
-        ////////
-
         // Vérification de la présence du fichier
-        
-        if (!$fichier instanceof UploadedFile) {
+        if (!$fichier instanceof UploadedFile || !$fichier->isValid()) {
             return $this->json([
-                'contentType' => $request->headers->get('content-type'),
-                'contentLength' => $request->headers->get('content-length'),
-                'requestKeys' => array_keys($request->request->all()),
-                'fileKeys' => array_keys($request->files->all()),
-                'phpFiles' => array_map(
-                    static fn ($f) => [
-                        'name' => $f['name'] ?? null,
-                        'error' => $f['error'] ?? null,
-                        'size' => $f['size'] ?? null,
-                    ],
-                    $_FILES
-                ),
-                'postMaxSize' => ini_get('post_max_size'),
-                'uploadMaxFilesize' => ini_get('upload_max_filesize'),
-            ], 400);
-        }
-
-        if (!$fichier->isValid()) {
-            return $this->json([
-                'error' => 'Erreur lors du téléversement.',
-                'uploadErrorCode' => $fichier->getError(),
-                'uploadErrorMessage' => $fichier->getErrorMessage(),
+                'error' => 'Aucun fichier valide fourni.'
             ], 400);
         }
 
@@ -90,17 +62,12 @@ class ImportController extends AbstractController
 
             $fichier->move($dossier, $nomStockage);
 
-        
         } catch (FileException $e) {
             $import->setStatut(StatutImport::ERREUR);
             $entityManager->flush();
 
             return $this->json([
-                'error' => 'Impossible de sauvegarder le fichier.',
-                'details' => $e->getMessage(),
-                'dossier' => $dossier,
-                'dossierExiste' => is_dir($dossier),
-                'dossierEcriture' => is_writable($dossier),
+                'error' => 'Impossible de sauvegarder le fichier.'
             ], 500);
         }
 
