@@ -273,9 +273,9 @@ class VictronCsvProcessor
             throw new \RuntimeException('Impossible d\'ouvrir le fichier CSV.');
         }
 
-        $sources = fgetcsv($fichier); // On charge la ligne des sources de meusure des données
+        $sources = fgetcsv($fichier, null, ',', '"', ''); // On charge la ligne des sources de meusure des données
 
-        $mesures = fgetcsv($fichier); // On charge la ligne des mesures
+        $mesures = fgetcsv($fichier, null, ',', '"', ''); // On charge la ligne des mesures
 
 
         //Si il nous manque l'une ou l'autres des lignes on ne peut pas identifier les colonnes correctement donc on annule le traitement du fichier
@@ -294,13 +294,13 @@ class VictronCsvProcessor
             );
         }
 
-        fgetcsv($fichier); // On saute la ligne avec les unités
+        fgetcsv($fichier, null, ',', '"', ''); // On saute la ligne avec les unités
 
         $this->resetEtat();
 
         $indexHorodatage = 0 ;
         
-        while (($ligne = fgetcsv($fichier)) !== false) {
+        while (($ligne = fgetcsv($fichier, null, ',', '"', '')) !== false) {
 
             $timestamp = $this->extractDateTime($ligne, $indexHorodatage);
 
