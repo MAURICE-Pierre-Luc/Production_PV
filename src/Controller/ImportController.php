@@ -90,12 +90,17 @@ class ImportController extends AbstractController
 
             $fichier->move($dossier, $nomStockage);
 
+        
         } catch (FileException $e) {
             $import->setStatut(StatutImport::ERREUR);
             $entityManager->flush();
 
             return $this->json([
-                'error' => 'Impossible de sauvegarder le fichier.'
+                'error' => 'Impossible de sauvegarder le fichier.',
+                'details' => $e->getMessage(),
+                'dossier' => $dossier,
+                'dossierExiste' => is_dir($dossier),
+                'dossierEcriture' => is_writable($dossier),
             ], 500);
         }
 
