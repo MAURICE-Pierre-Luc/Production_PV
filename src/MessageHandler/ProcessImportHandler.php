@@ -39,11 +39,8 @@ class ProcessImportHandler
             $this->entityManager->flush();
 
             // Traitement du CSV
-            try {
-                $resultat = $this->victronCsvProcessor->traiterCSV( $message->getImportId());
-            } catch (UniqueConstraintViolationException $e) {
-                throw new UnrecoverableMessageHandlingException($e->getMessage(), 0, $e);
-            }
+
+            $resultat = $this->victronCsvProcessor->traiterCSV( $message->getImportId());
 
             $import->setDateDebutDonnees($resultat['dateDebut']);
             $import->setDateFinDonnees($resultat['dateFin']);
