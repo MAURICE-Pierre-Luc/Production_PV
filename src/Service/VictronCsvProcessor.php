@@ -330,11 +330,11 @@ class VictronCsvProcessor
 
                 $this->sauvegarderJour();
 
-                $this->resetDonnesJour();
-
                 $this->previousDate = $this->currentDate;
 
                 $this->plagesHoraires = $this->getPlagesHoraires($this->currentDate);
+
+                $this->resetDonnesJour();
 
                 $this->previousUserYield = null;
                 $this->previousL1Energy = null;
