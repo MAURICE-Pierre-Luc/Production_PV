@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Repository\ImportRepository;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use DateTimeInterface;
+
 use App\Repository\GrilleTarifaireRepository;
 use App\Repository\JourRepository;
 
@@ -238,6 +240,15 @@ class VictronCsvProcessor
         }
         return $colonnesRetenues;
 
+    }
+
+
+    public function trouverParDate(\DateTimeInterface $date): ?Jour{
+        return $this->createQueryBuilder('j')
+            ->andWhere('j.dateJour = :date')
+            ->setParameter('date', $date->format('Y-m-d'))
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 
@@ -519,7 +530,7 @@ class VictronCsvProcessor
             );
         }
 
-        $jour = $this->entityManager->find(Jour::class, $this->previousDate);
+        $jour = $this->jourRepository->trouverParDate($date);
 
         if ($jour === null) {
             $jour = new Jour();
