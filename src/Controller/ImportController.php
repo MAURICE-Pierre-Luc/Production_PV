@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+
+// php bin/console app:importer-tarifs-tempo
+
 class ImportController extends AbstractController
 {
     #[Route('/api/import', name: 'app_import', methods: ['POST'])]
