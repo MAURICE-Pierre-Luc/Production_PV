@@ -388,19 +388,19 @@ class VictronCsvProcessor
                 }
 
                 if ($colonneInfo['cible'] === 'energie_prod') {
-                    $this->traiterProduction( $colonneInfo['source'], (float) $valeur, $this->currentHourtype );
+                    $this->traiterProduction( $colonneInfo['source'], (float) $valeur);
                 }
                 elseif ($colonneInfo['cible'] === 'puissance_prod') {
                     $this->traiterPuissanceProduction($colonneInfo['mesure'], (float) $valeur, $heure);
                 }
                 elseif ($colonneInfo['cible'] === 'energie_importe') {
-                    $this->traiterConsommation( (float) $valeur, $timestamp, $this->currentHourtype );
+                    $this->traiterConsommation( (float) $valeur, $timestamp);
                 }
                 elseif ($colonneInfo['cible'] === 'batterie') {
                     $this->traiterBatterie( $colonneInfo['mesure'], $valeur);
                 }
                 elseif ($colonneInfo['cible'] === 'ev') { 
-                    $this->traiterVE( (float) $valeur, $this->currentHourtype);
+                    $this->traiterVE( (float) $valeur);
                 }
             }
         }
@@ -417,7 +417,7 @@ class VictronCsvProcessor
         ];
     }
 
-    private function traiterProduction(string $source, float $valeur, ?string $typeHeure): void{
+    private function traiterProduction(string $source, float $valeur): void{
 
         if ($source === 'Solar Charger [279]') {
 
@@ -427,9 +427,9 @@ class VictronCsvProcessor
 
                 if ($difference >= 0) {
 
-                    if ($typeHeure === TypeHoraire::HC) {
+                    if ($this->currentHourtype === TypeHoraire::HC) {
                         $this->donneesJour['production']['energie_prod_hc'] += $difference;
-                    } elseif ($typeHeure === TypeHoraire::HP) {
+                    } elseif ($this->currentHourtype === TypeHoraire::HP) {
                         $this->donneesJour['production']['energie_prod_hp'] += $difference;
                     }
                 }
@@ -446,9 +446,9 @@ class VictronCsvProcessor
 
                 if ($difference >= 0) {
 
-                    if ($typeHeure === TypeHoraire::HC) {
+                    if ($this->currentHourtype === TypeHoraire::HC) {
                         $this->donneesJour['production']['energie_prod_hc'] += $difference;
-                    } elseif ($typeHeure === TypeHoraire::HP) {
+                    } elseif ($this->currentHourtype === TypeHoraire::HP) {
                         $this->donneesJour['production']['energie_prod_hp'] += $difference;
                     }
                 }
@@ -476,7 +476,7 @@ class VictronCsvProcessor
         }
     }
 
-    private function traiterConsommation(float $puissance, \DateTime $timestamp, ?string $typeHeure): void{
+    private function traiterConsommation(float $puissance, \DateTime $timestamp): void{
 
         if ($this->previousGridPower !== null && $this->previousTimestamp !== null) {
 
@@ -492,11 +492,11 @@ class VictronCsvProcessor
                 // Puissance en W -> énergie en kWh
                 $energie = ($puissanceMoyenne * $dureeSecondes) / 3600000;
 
-                if ($typeHeure === TypeHoraire::HC) {
+                if ($this->currentHourtype === TypeHoraire::HC) {
 
                     $this->donneesJour['consommation']['energie_importe_hc'] += $energie;
 
-                } elseif ($typeHeure === TypeHoraire::HP) {
+                } elseif ($this->currentHourtype === TypeHoraire::HP) {
 
                     $this->donneesJour['consommation']['energie_importe_hp'] += $energie;
                 }
@@ -552,7 +552,7 @@ class VictronCsvProcessor
         }
     }
 
-    private function traiterVE( float $forwardEnergy, ?string $typeHeure ): void {
+    private function traiterVE( float $forwardEnergy): void {
         
         if ($this->previousForwardEnergy !== null) {
 
