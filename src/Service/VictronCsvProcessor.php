@@ -575,7 +575,7 @@ class VictronCsvProcessor
             $jour->setDateJour($date);
         }
 
-        $jour->setCouleur(getTempoColor($date));
+        $jour->setCouleur($this->getTempoColor($date));
 
         // Production solaire
         $jour->setProductionEnergieHC(
