@@ -229,13 +229,12 @@ class VictronCsvProcessor
     }
 
     private function getHourType(array $plages, string $heure): string {
-        $heure = substr($heure, 0, 5); // normalise en HH:MM
-
         foreach ($plages as $plage) {
-            $deb = substr($plage['deb'], 0, 5);
-            $fin = substr($plage['fin'], 0, 5);
-            if ($fin === '00:00') {
-                $fin = '24:00'; // minuit = fin de journée
+            $deb = $plage['deb']->format('H:i:s');
+            $fin = $plage['fin']->format('H:i:s');
+
+            if ($fin === '00:00:00') {
+                $fin = '24:00:00'; // minuit = fin de journée
             }
 
             if ($heure >= $deb && $heure < $fin) {
