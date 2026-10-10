@@ -559,9 +559,9 @@ class VictronCsvProcessor
             $difference = $forwardEnergy - $this->previousForwardEnergy;
 
             if ($difference >= 0) {
-                if ($typeHeure === TypeHoraire::HC) {
+                if ($this->currentHourtype === TypeHoraire::HC) {
                     $this->donneesJour['ve']['energie_hc'] += $difference;
-                } elseif ($typeHeure === TypeHoraire::HP) {
+                } elseif ($this->currentHourtype === TypeHoraire::HP) {
                     $this->donneesJour['ve']['energie_hp'] += $difference;
                 }
             }
