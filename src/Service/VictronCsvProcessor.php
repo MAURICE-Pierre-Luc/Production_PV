@@ -15,6 +15,8 @@ use App\Entity\ProductionJour;
 use App\Entity\ConsommationJour;
 use App\Entity\BatterieJour;
 use App\Entity\VeJour;
+
+use App\Enum\TypeHoraire;
 use App\Enum\CouleurJour;
 
 class VictronCsvProcessor
@@ -228,7 +230,7 @@ class VictronCsvProcessor
             ->trouverPlagesHoraires(new \DateTimeImmutable($date));
     }
 
-    private function getHourType(array $plages, string $heure): string {
+    private function getHourType(array $plages, string $heure): TypeHoraire {
         foreach ($plages as $plage) {
             $deb = $plage['deb']->format('H:i:s');
             $fin = $plage['fin']->format('H:i:s');
@@ -242,7 +244,7 @@ class VictronCsvProcessor
             }
         }
 
-        return 'HP';
+        return TypeHoraire::HP;
     }
 
     private function extractDateTime(array $ligne, int $indexHorodatage): ?\DateTime {
@@ -275,6 +277,20 @@ class VictronCsvProcessor
         }
         return $colonnesRetenues;
 
+    }
+
+    private function getTempoColor(\DateTimeInterface $date): CouleurJour {
+
+        $url  = 'https://www.api-couleur-tempo.fr/api/jourTempo/' . $date->format('Y-m-d');
+        $json = @file_get_contents($url);
+        $data = $json !== false ? json_decode($json, true) : null;
+
+        return match ($data['codeJour'] ?? 0) {
+            1       => CouleurJour::BLEU,
+            2       => CouleurJour::BLANC,
+            3       => CouleurJour::ROUGE,
+            default => CouleurJour::INCONNU,
+        };
     }
 
     public function traiterCSV(int $importId): array {
@@ -411,9 +427,9 @@ class VictronCsvProcessor
 
                 if ($difference >= 0) {
 
-                    if ($typeHeure === 'HC') {
+                    if ($typeHeure === TypeHoraire::HC) {
                         $this->donneesJour['production']['energie_prod_hc'] += $difference;
-                    } elseif ($typeHeure === 'HP') {
+                    } elseif ($typeHeure === TypeHoraire::HP) {
                         $this->donneesJour['production']['energie_prod_hp'] += $difference;
                     }
                 }
@@ -430,9 +446,9 @@ class VictronCsvProcessor
 
                 if ($difference >= 0) {
 
-                    if ($typeHeure === 'HC') {
+                    if ($typeHeure === TypeHoraire::HC) {
                         $this->donneesJour['production']['energie_prod_hc'] += $difference;
-                    } elseif ($typeHeure === 'HP') {
+                    } elseif ($typeHeure === TypeHoraire::HP) {
                         $this->donneesJour['production']['energie_prod_hp'] += $difference;
                     }
                 }
@@ -476,11 +492,11 @@ class VictronCsvProcessor
                 // Puissance en W -> énergie en kWh
                 $energie = ($puissanceMoyenne * $dureeSecondes) / 3600000;
 
-                if ($typeHeure === 'HC') {
+                if ($typeHeure === TypeHoraire::HC) {
 
                     $this->donneesJour['consommation']['energie_importe_hc'] += $energie;
 
-                } elseif ($typeHeure === 'HP') {
+                } elseif ($typeHeure === TypeHoraire::HP) {
 
                     $this->donneesJour['consommation']['energie_importe_hp'] += $energie;
                 }
@@ -543,9 +559,9 @@ class VictronCsvProcessor
             $difference = $forwardEnergy - $this->previousForwardEnergy;
 
             if ($difference >= 0) {
-                if ($typeHeure === 'HC') {
+                if ($typeHeure === TypeHoraire::HC) {
                     $this->donneesJour['ve']['energie_hc'] += $difference;
-                } elseif ($typeHeure === 'HP') {
+                } elseif ($typeHeure === TypeHoraire::HP) {
                     $this->donneesJour['ve']['energie_hp'] += $difference;
                 }
             }
@@ -553,21 +569,6 @@ class VictronCsvProcessor
 
         $this->previousForwardEnergy = $forwardEnergy;
     }
-
-    private function getTempoColor(\DateTimeInterface $date): CouleurJour {
-
-        $url  = 'https://www.api-couleur-tempo.fr/api/jourTempo/' . $date->format('Y-m-d');
-        $json = @file_get_contents($url);
-        $data = $json !== false ? json_decode($json, true) : null;
-
-        return match ($data['codeJour'] ?? 0) {
-            1       => CouleurJour::BLEU,
-            2       => CouleurJour::BLANC,
-            3       => CouleurJour::ROUGE,
-            default => CouleurJour::INCONNU,
-        };
-    }
-
     
     private function sauvegarderJour(): void{
 
