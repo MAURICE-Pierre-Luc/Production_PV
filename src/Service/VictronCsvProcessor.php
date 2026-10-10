@@ -213,14 +213,32 @@ class VictronCsvProcessor
         return $this->projectDir . '/var/imports/' . $importId . '.csv';
     }
 
-    private function getPlagesHoraires(string $date): array{
+    private function getJourTempo(\DateTimeInterface $t): string {
+        $jour = \DateTimeImmutable::createFromInterface($t);
 
-        return $this->grilleTarifaireRepository->trouverPlagesHoraires(new \DateTimeImmutable($date));
+        if ((int) $jour->format('G') < 6) {
+            $jour = $jour->modify('-1 day');
+        }
+
+        return $jour->format('Y-m-d');
     }
 
-    private function getHourType ($plages, $heure): string{
+    private function getPlagesHoraires(string $date): array {
+        return $this->plagesHoraires[$date] ??= $this->grilleTarifaireRepository
+            ->trouverPlagesHoraires(new \DateTimeImmutable($date));
+    }
+
+    private function getHourType(array $plages, string $heure): string {
+        $heure = substr($heure, 0, 5); // normalise en HH:MM
+
         foreach ($plages as $plage) {
-            if ( $heure >= $plage['deb'] && $heure < $plage['fin']) {
+            $deb = substr($plage['deb'], 0, 5);
+            $fin = substr($plage['fin'], 0, 5);
+            if ($fin === '00:00') {
+                $fin = '24:00'; // minuit = fin de journée
+            }
+
+            if ($heure >= $deb && $heure < $fin) {
                 return $plage['type'];
             }
         }
@@ -312,7 +330,7 @@ class VictronCsvProcessor
                 continue;
             }
 
-            $this->currentDate = $timestamp->format('Y-m-d');
+            $this->currentDate = $this->getJourTempo($timestamp); 
             $this->dateFin = $timestamp;
 
             if ($this->dateDebut === null) {
@@ -325,7 +343,7 @@ class VictronCsvProcessor
                 
                 $this->previousDate = $this->currentDate;
 
-                $this->plagesHoraires = $this->getPlagesHoraires($this->currentDate);
+                $this->plagesHoraires = $this->getPlagesHoraires($timestamp->format('Y-m-d'));
             }
             elseif ($this->currentDate !== $this->previousDate) {
 
@@ -333,9 +351,9 @@ class VictronCsvProcessor
 
                 $this->previousDate = $this->currentDate;
 
-                $this->plagesHoraires = $this->getPlagesHoraires($this->currentDate);
+                $this->plagesHoraires = $this->getPlagesHoraires($timestamp->format('Y-m-d'));
 
-                $this->resetDonnesJour();
+                $this->donneesJour = $this->resetDonnesJour();
 
                 $this->previousUserYield = null;
                 $this->previousL1Energy = null;
@@ -344,7 +362,7 @@ class VictronCsvProcessor
                 $this->previousTimestamp = null;
             }
 
-            $this->currentHourtype = $this->getHourType( $this->plagesHoraires, $heure);
+            $this->currentHourtype = $this->getHourType($this->plagesHoraires, $heure);
 
             foreach ($colonnesRetenues as $index => $colonneInfo) {
 
