@@ -28,7 +28,7 @@ class VictronCsvProcessor
 
     private ?string $currentDate = null;
 
-    private ?string $currentHourtype = null;
+    private ?TypeHoraire $currentHourtype = null;
 
     private ?float $puissanceAc = null;
     
