@@ -15,6 +15,7 @@ use App\Entity\ProductionJour;
 use App\Entity\ConsommationJour;
 use App\Entity\BatterieJour;
 use App\Entity\VeJour;
+use App\Enum\CouleurJour;
 
 class VictronCsvProcessor
 {
@@ -536,6 +537,21 @@ class VictronCsvProcessor
         $this->previousForwardEnergy = $forwardEnergy;
     }
 
+    private function getTempoColor(\DateTimeInterface $date): CouleurJour {
+
+        $url  = 'https://www.api-couleur-tempo.fr/api/jourTempo/' . $date->format('Y-m-d');
+        $json = @file_get_contents($url);
+        $data = $json !== false ? json_decode($json, true) : null;
+
+        return match ($data['codeJour'] ?? 0) {
+            1       => CouleurJour::BLEU,
+            2       => CouleurJour::BLANC,
+            3       => CouleurJour::ROUGE,
+            default => CouleurJour::INCONNU,
+        };
+    }
+
+    
     private function sauvegarderJour(): void{
 
         $date = \DateTime::createFromFormat('!Y-m-d', $this->previousDate);
@@ -545,10 +561,7 @@ class VictronCsvProcessor
                 'Date invalide : ' . $this->previousDate
             );
         }
-        $id = $this->entityManager
-            ->createQuery('SELECT j.id FROM App\Entity\Jour j WHERE j.dateJour = :d')
-            ->setParameter('d', $date, \Doctrine\DBAL\Types\Types::DATE_MUTABLE)
-            ->getOneOrNullResult();
+
 
         $jour = $this->entityManager
             ->createQuery('SELECT j FROM App\Entity\Jour j WHERE j.dateJour = :d')
@@ -561,6 +574,8 @@ class VictronCsvProcessor
             $jour = new Jour();
             $jour->setDateJour($date);
         }
+
+        $jour->setCouleur(getTempoColor($date));
 
         // Production solaire
         $jour->setProductionEnergieHC(
