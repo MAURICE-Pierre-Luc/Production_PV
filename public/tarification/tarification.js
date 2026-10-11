@@ -32,15 +32,8 @@ async function getTarifs(){
             console.log("La liste de tarifs est vide");
         }else{
 
-
-            // resultat.map(element => `
-            //     <tr>
-            //         <td>${element.nomFichier ?? "---"}</td>
-            //         <td>${element.dateDebutDonnees ?? "---"}</td>
-            //         <td>${element.dateFinDonnees ?? "---"}</td>
-            //         <td>${element.statut ?? "---"}</td>
-            //     </tr>
-            // `).join("");
+            afficherTarifs(resultat);
+            
         }
 
     } catch (error)  {
@@ -195,12 +188,29 @@ const chart = new Chart(canvas, {
     }
 });
 
-function ajouterTarifs(date, bleuHC, blancHC, rougeHC) {
-    chart.data.labels.push(date);
+function afficherTarifs(tarifs) {
+    // Regroupe par date de début : { '2026-01-01': { bleu: 0.1, blanc: 0.2, rouge: 0.3 } }
+    const parDate = {};
 
-    chart.data.datasets[0].data.push(bleuHC);
-    chart.data.datasets[1].data.push(blancHC);
-    chart.data.datasets[2].data.push(rougeHC);
+    tarifs.filter(t => t.type === 'HC').forEach(t => {
+            if (!parDate[t.dateDebut]) {
+                parDate[t.dateDebut] = {};
+            }
+            // On garde la première valeur rencontrée (puissance ignorée)
+            if (parDate[t.dateDebut][t.couleur] === undefined) {
+                parDate[t.dateDebut][t.couleur] = Number(t.tarif);
+            }
+        });
+
+    // Les dates au format Y-m-d se trient correctement par ordre alphabétique
+    const dates = Object.keys(parDate).sort();
+
+    chart.data.labels = dates;
+    chart.data.datasets[0].data = dates.map(d => parDate[d].bleu  ?? null);
+    chart.data.datasets[1].data = dates.map(d => parDate[d].blanc ?? null);
+    chart.data.datasets[2].data = dates.map(d => parDate[d].rouge ?? null);
 
     chart.update();
 }
+
+
