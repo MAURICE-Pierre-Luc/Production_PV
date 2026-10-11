@@ -201,6 +201,7 @@ importButton.addEventListener("click", async function () {
 
     } finally {
         importButton.disabled = false;
+        listImports()
     }
 });
 
