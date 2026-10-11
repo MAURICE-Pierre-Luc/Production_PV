@@ -224,19 +224,24 @@ async function listImports(){
             );
         }
 
-        console.log(resultat);
+        if(resultat.length === 0){
+            console.log("La liste d'imports est vide");
+        }else{
+
+
+            historyTableContent.innerHTML = resultat.map(element => `
+                <tr>
+                    <td>${element.nomFichier ?? "---"}</td>
+                    <td>${element.dateDebutDonnees ?? "---"}</td>
+                    <td>${element.dateFinDonnees ?? "---"}</td>
+                    <td>${element.statut ?? "---"}</td>
+                </tr>
+            `).join("");
+        }
 
 
 
-        resultat.forEach(element => {
-            historyTableContent.appendChild = `
-                    <tr>
-                        <td> ${element["nomFichier"]} </td>
-                        <td> ${element["dateDebutDonnees"]}</td>
-                        <td> ${element["dateFinDonnees"]}</td>
-                        <td> ${element["statut"]}</td>
-                    </tr>`
-        });
+        
 
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
