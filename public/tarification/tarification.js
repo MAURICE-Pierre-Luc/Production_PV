@@ -155,7 +155,7 @@ async function getExtremeDates(){
 
             dateMAJ.textContent = formatDate(resultat.dateMax);
 
-            spanPeriode.textContent = `${formatDate(startDate)} → ${formatDate(endDate)}`;
+            spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
                         
     }
 
