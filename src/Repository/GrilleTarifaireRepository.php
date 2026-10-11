@@ -53,28 +53,4 @@ class GrilleTarifaireRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function findDistinctPuissances(): array
-    {
-        $result = $this->createQueryBuilder('g')
-            ->select('DISTINCT g.puissance')
-            ->where('g.puissance IS NOT NULL')
-            ->orderBy('g.puissance', 'ASC')
-            ->getQuery()
-            ->getSingleColumnResult();
-
-        return array_map('intval', $result);
-    }
-
-    public function findBornesDates(): array
-    {
-        $result = $this->createQueryBuilder('g')
-            ->select('MIN(g.dateDebut) AS dateMin', 'MAX(g.dateFin) AS dateMax')
-            ->getQuery()
-            ->getSingleResult();
-
-        return [
-            'dateMin' => $result['dateMin'],
-            'dateMax' => $result['dateMax'],
-        ];
-    }
 }
