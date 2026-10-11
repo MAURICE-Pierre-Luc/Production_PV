@@ -10,7 +10,7 @@ const listePuissances =  document.getElementById('subscribed-power');
 const dateMAJ = document.getElementById('last-update');
 const spanPeriode = document.getElementById('chart-period')
 
-let puissanceChoisie = 6;   // variable modifiable (kVA)
+let puissanceDefaut = 6;   // variable modifiable (kVA)
 let tousLesTarifs = [];     // on garde les données pour ne pas refaire l'appel API
 
 // Associe "couleur + type" à l'index du dataset du graphe
@@ -49,9 +49,10 @@ async function getTarifs(){
 
             tousLesTarifs = resultat;
 
-            afficherTarifs(puissanceChoisie);
+            afficherTarifs(puissanceDefaut);
             afficherDates();
             ajouterPuissances();
+            afficherTarifsRecent(puissanceDefaut)
             
         }
     } catch (error)  {
@@ -99,9 +100,9 @@ function afficherTarifs(puissance) {
 
 function afficherDates(){
 
-    dateMin = tousLesTarifs.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
+    dateMin = tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null);
 
-    dateMax = tousLesTarifs.some(g => g.dateFin === null) ? null : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
+    dateMax = tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null);
 
     dateMAJ.textContent = formatDate(dateMax);
 
@@ -111,7 +112,7 @@ function afficherDates(){
 
 function ajouterPuissances(){
 
-    puissances = [...new Set(tousLesTarifs.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
+    puissances = [...new Set(tousLesTarifs.map(t => t.puissance))].filter(p => p !== null).sort((a, b) => a - b);
 
     puissances.forEach(element => {
         const option = document.createElement("option");
@@ -124,9 +125,24 @@ function ajouterPuissances(){
 
 }
 
+function afficherTarifsRecent(puissance) {
+  const lignes = tousLesTarifs.filter(t => t.puissance === puissance);
+  if (lignes.length === 0) return [];
+
+  const dateMax = lignes.reduce((max, t) => (t.dateDebut > max ? t.dateDebut : max), lignes[0].dateDebut);
+
+  result = lignes.filter(g => g.dateDebut === dateMax);
+
+  console.log(result);
+}
+
+// Utilisation
+const tarifs = getTarifsRecents(tousLesTarifs, 6);
+
 listePuissances.addEventListener("change", (event) => {
     puissanceChoisie = Number(event.target.value);
     afficherTarifs(puissanceChoisie);
+    afficherTarifsRecent(puissanceChoisie);
 });
 
 /*
