@@ -26,11 +26,13 @@ async function getTarifs(){
             );
         }
 
-        console.log(resultat);
+        
 
         if(resultat.length === 0){
             console.log("La liste de tarifs est vide");
         }else{
+
+            console.log(resultat);
 
             afficherTarifs(resultat);
             
@@ -91,35 +93,35 @@ function displayTariffs() {
 }
 
 
-/*
- * Mise à jour de la période affichée
- */
+// /*
+//  * Mise à jour de la période affichée
+//  */
 
-async function updatePeriod() {
+// async function updatePeriod() {
 
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value;
+//     const startDate = startDateInput.value;
+//     const endDate = endDateInput.value;
 
-    if (!startDate || !endDate) {
-        return;
-    }
+//     if (!startDate || !endDate) {
+//         return;
+//     }
 
-    if (startDate > endDate) {
-        alert("La date de début doit être antérieure à la date de fin.");
-        return;
-    }
+//     if (startDate > endDate) {
+//         alert("La date de début doit être antérieure à la date de fin.");
+//         return;
+//     }
 
-    const periodText = `${formatDate(startDate)} → ${formatDate(endDate)}`;
+//     const periodText = `${formatDate(startDate)} → ${formatDate(endDate)}`;
 
 
-    displayTariffs();
-}
+//     displayTariffs();
+// }
 
-/*
- * Initialisation
- */
+// /*
+//  * Initialisation
+//  */
 
-updatePeriod();
+// updatePeriod();
 
 
 
@@ -209,6 +211,8 @@ function afficherTarifs(tarifs) {
     chart.data.datasets[0].data = dates.map(d => parDate[d].bleu  ?? null);
     chart.data.datasets[1].data = dates.map(d => parDate[d].blanc ?? null);
     chart.data.datasets[2].data = dates.map(d => parDate[d].rouge ?? null);
+
+    console.log("test")
 
     chart.update();
 }
