@@ -48,7 +48,10 @@ async function getTarifs(){
         }else{
 
             tousLesTarifs = resultat;
+
             afficherTarifs(puissanceChoisie);
+            afficherDates();
+            ajouterPuissances();
             
         }
     } catch (error)  {
@@ -94,7 +97,37 @@ function afficherTarifs(puissance) {
     chart.update();
 }
 
+function afficherDates(){
 
+    dateMin = tousLesTarifs.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
+
+    dateMax = tousLesTarifs.some(g => g.dateFin === null) ? null : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
+
+    dateMAJ.textContent = formatDate(dateMax);
+
+    spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
+
+}
+
+function ajouterPuissances(){
+
+    puissances = [...new Set(tousLesTarifs.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
+
+    puissances.forEach(element => {
+        const option = document.createElement("option");
+
+        option.value = element;
+        option.textContent = `${element} kVA`;
+
+        listePuissances.appendChild(option);
+    });
+
+}
+
+listePuissances.addEventListener("change", (event) => {
+    puissanceChoisie = Number(event.target.value);
+    afficherTarifs(puissanceChoisie);
+});
 
 /*
  * Formatage des dates
@@ -291,28 +324,4 @@ chart.data.datasets.forEach((dataset, index) => {
 
 
 
-const puissances = [...new Set(tousLesTarifs.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
 
-const dateMin = tousLesTarifs.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
-
-const dateMax = tousLesTarifs.some(g => g.dateFin === null) ? null : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
-
-
-puissances.forEach(element => {
-    const option = document.createElement("option");
-
-    option.value = element;
-    option.textContent = `${element} kVA`;
-
-    listePuissances.appendChild(option);
-});
-
-listePuissances.addEventListener("change", (event) => {
-    puissanceChoisie = Number(event.target.value);
-    afficherTarifs(puissanceChoisie);
-});
-
-
-dateMAJ.textContent = formatDate(dateMax);
-
-spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
