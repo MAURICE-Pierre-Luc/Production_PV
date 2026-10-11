@@ -2,9 +2,9 @@
  * Vérification de la connexion
  */
 
-if (sessionStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "../login/login.html";
-}
+// if (sessionStorage.getItem("loggedIn") !== "true") {
+//     window.location.href = "../login/login.html";
+// }
 
 
 /*
@@ -249,4 +249,4 @@ async function listImports(){
 * Raffraichit la liste des imports
 */ 
 
-refreshButton.addEventListener("click", () => {listImports()});
+refreshButton.addEventListener("click", listImports);
