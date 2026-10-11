@@ -125,15 +125,23 @@ function ajouterPuissances(){
 
 }
 
-function afficherTarifsRecent(puissance) {
+function getTarifsRecents(puissance) {
   const lignes = tousLesTarifs.filter(t => t.puissance === puissance);
   if (lignes.length === 0) return [];
 
   const dateMax = lignes.reduce((max, t) => (t.dateDebut > max ? t.dateDebut : max), lignes[0].dateDebut);
 
-  result = lignes.filter(g => g.dateDebut === dateMax);
+  const uniques = new Map();
 
-  console.log(result);
+  for (const l of lignes) {
+    if (l.dateDebut === dateMax) {
+      uniques.set(`${l.couleur}|${l.type}`, l);
+    }
+  }
+
+  console.log([...uniques.values()])
+
+  return [...uniques.values()];
 }
 
 
