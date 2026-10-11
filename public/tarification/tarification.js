@@ -93,11 +93,11 @@ function afficherTarifs(puissance) {
     chart.update();
 }
 
-const puissances = [...new Set(grilles.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
+const puissances = [...new Set(tousLesTarifs.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
 
-const dateMin = grilles.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
+const dateMin = tousLesTarifs.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
 
-const dateMax = grilles.some(g => g.dateFin === null) ? null : grilles.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
+const dateMax = tousLesTarifs.some(g => g.dateFin === null) ? null : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
 
 
 puissances.forEach(element => {
@@ -310,8 +310,5 @@ chart.data.datasets.forEach((dataset, index) => {
 });
 
 
-getPuissances();
-
-getExtremeDates();
 
 getTarifs();
