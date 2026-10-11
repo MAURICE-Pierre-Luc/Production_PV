@@ -31,11 +31,8 @@ const COULEURS_ORIGINALES = {};
 
 
 async function getTarifs(){
-
     try{
         const response = await fetch(`${API_URL}`)
-
-        // Lecture de la réponse JSON de Symfony.
         const resultat = await response.json();
 
         if (!response.ok) {
@@ -45,25 +42,17 @@ async function getTarifs(){
                 || `Erreur HTTP ${response.status}`
             );
         }
-
-        
-
         if(resultat.length === 0){
             console.log("La liste de tarifs est vide");
         }else{
-
-            console.log(resultat);
 
             tousLesTarifs = resultat;
             afficherTarifs(puissanceChoisie);
             
         }
-
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
     }
-
-
 }
 
 
@@ -106,11 +95,8 @@ function afficherTarifs(puissance) {
 
 
 async function getPuissances(){
-
      try{
         const response = await fetch(`${API_URL}/puissances`)
-
-        // Lecture de la réponse JSON de Symfony.
         const resultat = await response.json();
 
         if (!response.ok) {
@@ -120,7 +106,6 @@ async function getPuissances(){
                 || `Erreur HTTP ${response.status}`
             );
         }
-
         if(resultat.length === 0){
             console.log("La liste de tarifs est vide");
         }else{
@@ -135,7 +120,7 @@ async function getPuissances(){
 
                 listePuissances.appendChild(option);
             });
-                        
+          
         }
 
     } catch (error)  {
@@ -151,11 +136,8 @@ listePuissances.addEventListener("change", (event) => {
 
 
 async function getExtremeDates(){
-
     try{
         const response = await fetch(`${API_URL}/bornes-dates`)
-
-        // Lecture de la réponse JSON de Symfony.
         const resultat = await response.json();
 
         if (!response.ok) {
@@ -165,7 +147,6 @@ async function getExtremeDates(){
                 || `Erreur HTTP ${response.status}`
             );
         }
-
         if(resultat.length === 0){
             console.log("La liste de tarifs est vide");
         }else{
@@ -375,5 +356,7 @@ chart.data.datasets.forEach((dataset, index) => {
 
 
 getPuissances();
+
+getExtremeDates();
 
 getTarifs();
