@@ -37,7 +37,7 @@ const refreshButton = document.getElementById();
  * On récupère les imports déja faits
  */
 
-refreshImports()
+listImports();
 
 
 
@@ -254,4 +254,4 @@ async function listImports(){
 * Raffraichit la liste des imports
 */ 
 
-
+refreshButton.addEventListener("click", listImports());
