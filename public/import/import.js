@@ -240,18 +240,13 @@ async function listImports(){
             `).join("");
         }
 
-
-
-        
-
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
     }
-
 }
 
 /*
 * Raffraichit la liste des imports
 */ 
 
-refreshButton.addEventListener("click", listImports());
+refreshButton.addEventListener("click", () => {listImports()});
