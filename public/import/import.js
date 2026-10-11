@@ -226,6 +226,8 @@ async function listImports(){
 
         console.log(resultat);
 
+        console.log(document.getElementById("history-table-").children);
+
 
         resultat.forEach(element => {
             historyTableContent.appendChild = `
