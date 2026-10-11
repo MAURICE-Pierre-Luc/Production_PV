@@ -29,6 +29,7 @@ const COULEURS_ORIGINALES = {};
  * Recuperation des tarifs
  */
 
+getTarifs();
 
 async function getTarifs(){
     try{
@@ -287,7 +288,7 @@ chart.data.datasets.forEach((dataset, index) => {
 
 
 
-getTarifs();
+
 
 
 const puissances = [...new Set(tousLesTarifs.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
