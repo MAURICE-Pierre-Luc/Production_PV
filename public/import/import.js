@@ -226,7 +226,7 @@ async function listImports(){
 
         console.log(resultat);
 
-        console.log(document.getElementById("history-table-"));
+        console.log(document.getElementById("history-table-content"));
 
 
         resultat.forEach(element => {
