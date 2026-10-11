@@ -126,22 +126,37 @@ function ajouterPuissances(){
 }
 
 function afficherTarifsRecents(puissance) {
-  const lignes = tousLesTarifs.filter(t => t.puissance === puissance);
-  if (lignes.length === 0) return [];
 
-  const dateMax = lignes.reduce((max, t) => (t.dateDebut > max ? t.dateDebut : max), lignes[0].dateDebut);
+    const lignes = tousLesTarifs.filter(t => t.puissance === puissance);
+    
+    if (lignes.length === 0) return [];
 
-  const uniques = new Map();
+    const dateMax = lignes.reduce((max, t) => (t.dateDebut > max ? t.dateDebut : max), lignes[0].dateDebut);
 
-  for (const l of lignes) {
-    if (l.dateDebut === dateMax) {
-      uniques.set(`${l.couleur}|${l.type}`, l);
+    const uniques = new Map();
+
+    for (const l of lignes) {
+        if (l.dateDebut === dateMax) {
+            uniques.set(`${l.couleur}|${l.type}`, l);
+        }
     }
-  }
 
-  console.log([...uniques.values()])
+    tarifs = ([...uniques.values()])
 
-  return [...uniques.values()];
+    document.getElementById("blue-hc").textContent = tarifs.BLEU?.HC;
+
+    document.getElementById("blue-hp").textContent = tarifs.BLEU?.HP;
+
+
+    document.getElementById("white-hc").textContent = tarifs.BLANC?.HC;
+
+    document.getElementById("white-hp").textContent = tarifs.BLANC?.HP;
+
+
+    document.getElementById("red-hc").textContent = tarifs.ROUGE?.HC;
+
+    document.getElementById("red-hp").textContent = tarifs.ROUGE?.HC;
+
 }
 
 
@@ -170,30 +185,6 @@ function formatDate(date) {
     return `${parts[0]}/${parts[1]}/${parts[2]}`;
 }
 
-
-/*
- * Affichage des tarifs
- */
-
-function displayTariffs() {
-
-    document.getElementById("blue-hc").textContent = tariffData.blue.hc;
-
-    document.getElementById("blue-hp").textContent = tariffData.blue.hp;
-
-
-    document.getElementById("white-hc").textContent = tariffData.white.hc;
-
-    document.getElementById("white-hp").textContent = tariffData.white.hp;
-
-
-    document.getElementById("red-hc").textContent = tariffData.red.hc;
-
-    document.getElementById("red-hp").textContent = tariffData.red.hp;
-
-
-    document.getElementById("subscribed-power").textContent = tariffData.subscribedPower;
-}
 
 
 // Associe chaque courbe à sa couleur Tempo
