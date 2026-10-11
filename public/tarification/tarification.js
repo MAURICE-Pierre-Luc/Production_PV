@@ -93,12 +93,22 @@ function afficherTarifs(puissance) {
     chart.update();
 }
 
-const puissances = [...new Set(tousLesTarifs.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
+const puissances = [...new Set(tousLesTarifs.map(g => g.puissance))]
+  .filter(p => p !== null)
+  .sort((a, b) => a - b);
 
-const dateMin = tousLesTarifs.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
+console.log(puissances)
 
-const dateMax = tousLesTarifs.some(g => g.dateFin === null) ? null : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
+const dateMin = tousLesTarifs.reduce((min, g) =>
+  !min || g.dateDebut < min ? g.dateDebut : min, null);
 
+console.log(dateMin);
+
+const dateMax = tousLesTarifs.some(g => g.dateFin === null)
+  ? null // au moins une grille encore en vigueur
+  : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
+
+console.log(dateMax);
 
 puissances.forEach(element => {
     const option = document.createElement("option");
