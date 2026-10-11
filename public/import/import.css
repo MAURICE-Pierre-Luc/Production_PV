@@ -254,17 +254,6 @@ body {
     margin-bottom: 1rem;
 }
 
-
-.history-section h2 {
-    margin: 0 0 20px;
-    font-size: 22px;
-}
-
-
-.history-header h2 {
-    margin: 0;
-}
-
 .refresh-button {
     display: flex;
     align-items: center;
@@ -281,6 +270,11 @@ body {
     transition: transform 0.3s ease;
 }
 
+
+.history-section h2 {
+    margin: 0 0 20px;
+    font-size: 22px;
+}
 
 .history-table-container {
     overflow: hidden;
