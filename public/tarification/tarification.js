@@ -126,9 +126,14 @@ async function getPuissances(){
             console.log(resultat);
 
             resultat.forEach(element => {
-                listePuissances.appendChild(document.createElement(`<option value="${element}">${element} kVA</option>`))
+                const option = document.createElement("option");
+
+                option.value = element;
+                option.textContent = `${element} kVA`;
+
+                listePuissances.appendChild(option);
             });
-            
+                        
         }
 
     } catch (error)  {
