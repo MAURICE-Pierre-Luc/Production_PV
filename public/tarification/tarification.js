@@ -128,20 +128,17 @@ function ajouterPuissances(){
 function afficherTarifsRecents(puissance) {
 
     const lignes = tousLesTarifs.filter(t => t.puissance === puissance);
-    
-    if (lignes.length === 0) return [];
+    if (lignes.length === 0) return {};
 
     const dateMax = lignes.reduce((max, t) => (t.dateDebut > max ? t.dateDebut : max), lignes[0].dateDebut);
 
-    const uniques = new Map();
+    const tarifs = {};
 
     for (const l of lignes) {
         if (l.dateDebut === dateMax) {
-            uniques.set(`${l.couleur}|${l.type}`, l);
+        (tarifs[l.couleur] ??= {})[l.type] = parseFloat(l.tarif);
         }
     }
-
-    tarifs = ([...uniques.values()])
 
     document.getElementById("blue-hc").textContent = tarifs.BLEU?.HC;
 
