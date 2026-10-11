@@ -147,21 +147,24 @@ const chart = new Chart(canvas, {
                 data: [],
                 borderColor: '#4385d8',
                 backgroundColor: '#4385d8',
-                tension: 0.2
+                tension: 0.2,
+                spanGaps: true
             },
             {
                 label: 'Tarif blanc HC',
                 data: [],
                 borderColor: '#999999',
                 backgroundColor: '#999999',
-                tension: 0.2
+                tension: 0.2,
+                spanGaps: true
             },
             {
                 label: 'Tarif rouge HC',
                 data: [],
                 borderColor: '#d9534f',
                 backgroundColor: '#d9534f',
-                tension: 0.2
+                tension: 0.2,
+                spanGaps: true
             }
         ]
     },
