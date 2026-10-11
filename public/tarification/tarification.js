@@ -152,7 +152,7 @@ function afficherTarifsRecents(puissance) {
 
     document.getElementById("red-hc").textContent = tarifs.ROUGE?.HC;
 
-    document.getElementById("red-hp").textContent = tarifs.ROUGE?.HC;
+    document.getElementById("red-hp").textContent = tarifs.ROUGE?.HP;
 
 }
 
@@ -160,7 +160,7 @@ function afficherTarifsRecents(puissance) {
 listePuissances.addEventListener("change", (event) => {
     puissanceChoisie = Number(event.target.value);
     afficherTarifs(puissanceChoisie);
-    afficherTarifsRecent(puissanceChoisie);
+    afficherTarifsRecents(puissanceChoisie);
 });
 
 /*
