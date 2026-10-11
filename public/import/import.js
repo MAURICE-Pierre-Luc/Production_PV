@@ -31,7 +31,7 @@ const importButton = document.getElementById("import-button");
 const importStatus = document.getElementById("import-status");
 
 const historyTableContent = document.getElementById("history-table-content");
-const refreshButton = document.getElementById();
+const refreshButton = document.getElementById("refresh-imports");
 
 /*
  * On récupère les imports déja faits
