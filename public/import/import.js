@@ -31,13 +31,13 @@ const importButton = document.getElementById("import-button");
 const importStatus = document.getElementById("import-status");
 
 const historyTableContent = document.getElementById("history-table-content");
-
+const refreshButton = document.getElementById();
 
 /*
  * On récupère les imports déja faits
  */
 
-listImports();
+refreshImports()
 
 
 
@@ -249,3 +249,9 @@ async function listImports(){
     }
 
 }
+
+/*
+* Raffraichit la liste des imports
+*/ 
+
+

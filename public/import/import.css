@@ -246,10 +246,41 @@ body {
 
 /* Historique */
 
+
+.history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+
 .history-section h2 {
     margin: 0 0 20px;
     font-size: 22px;
 }
+
+
+.history-header h2 {
+    margin: 0;
+}
+
+.refresh-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.refresh-button:hover {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
 
 .history-table-container {
     overflow: hidden;
