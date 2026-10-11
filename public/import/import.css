@@ -244,32 +244,22 @@ body {
 }
 
 
-/* Historique */
-
+/* En-tête de l'historique */
 
 .history-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+
+    margin-bottom: 20px;
 }
 
-.refresh-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    font-size: 1.6rem;
-    cursor: pointer;
+.history-header h2 {
+    margin: 0;
+    font-size: 22px;
 }
 
-.refresh-button:hover {
-    transform: rotate(180deg);
-    transition: transform 0.3s ease;
-}
-
+/* Historique */
 
 .history-section h2 {
     margin: 0 0 20px;
@@ -317,6 +307,32 @@ body {
     color: #888;
 
     text-align: center !important;
+}
+
+/* Bouton d'actualisation */
+
+.refresh-button {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    background-color: white;
+    color: #444;
+
+    font-size: 24px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.refresh-button:hover {
+    background-color: #f1f1f1;
 }
 
 
