@@ -15,24 +15,6 @@ body {
     margin: 40px auto;
 }
 
-
-/* En-tête */
-
-.page-header {
-    margin-bottom: 30px;
-}
-
-.page-header h1 {
-    margin: 0 0 8px;
-    font-size: 32px;
-}
-
-.page-header p {
-    margin: 0;
-    color: #666;
-}
-
-
 /* Sélection période */
 
 .period-selector {
@@ -294,6 +276,36 @@ body {
 
 .information-item strong {
     font-size: 17px;
+}
+
+.power-select {
+    width: fit-content;
+    min-width: 90px;
+    height: 30px;
+    padding: 0 22px 0 2px;
+
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+
+    color: #222;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.power-select:hover {
+    background-color: #f5f6f8;
+    border-color: #ddd;
+}
+
+.power-select:focus {
+    outline: none;
+    border-color: #4385d8;
+    background-color: white;
 }
 
 

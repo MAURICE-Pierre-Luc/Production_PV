@@ -5,6 +5,20 @@
 const API_URL = "/api/grille-tarifaire";
 
 
+let puissanceChoisie = 6;   // variable modifiable (kVA)
+let tousLesTarifs = [];     // on garde les données pour ne pas refaire l'appel API
+
+// Associe "couleur + type" à l'index du dataset du graphe
+const INDEX_DATASETS = {
+    'BLEU_HC': 0,
+    'BLEU_HP': 1,
+    'BLANC_HC': 2,
+    'BLANC_HP': 3,
+    'ROUGE_HC': 4,
+    'ROUGE_HP': 5
+};
+
+
 /*
  * Recuperation des tarifs
  */
@@ -34,7 +48,8 @@ async function getTarifs(){
 
             console.log(resultat);
 
-            afficherTarifs(resultat);
+            tousLesTarifs = resultat;
+            afficherTarifs(puissanceChoisie);
             
         }
 
@@ -142,29 +157,49 @@ const chart = new Chart(canvas, {
         labels: [],
 
         datasets: [
+            // Bleu
             {
-                label: 'Tarif bleu HC',
+                label: 'Bleu HC',
                 data: [],
                 borderColor: '#4385d8',
-                backgroundColor: '#4385d8',
-                tension: 0.2,
-                spanGaps: true
+                tension: 0.2
             },
             {
-                label: 'Tarif blanc HC',
+                label: 'Bleu HP',
+                data: [],
+                borderColor: '#4385d8',
+                borderDash: [5, 5],
+                tension: 0.2
+            },
+
+            // Blanc
+            {
+                label: 'Blanc HC',
                 data: [],
                 borderColor: '#999999',
-                backgroundColor: '#999999',
-                tension: 0.2,
-                spanGaps: true
+                tension: 0.2
             },
             {
-                label: 'Tarif rouge HC',
+                label: 'Blanc HP',
+                data: [],
+                borderColor: '#999999',
+                borderDash: [5, 5],
+                tension: 0.2
+            },
+
+            // Rouge
+            {
+                label: 'Rouge HC',
                 data: [],
                 borderColor: '#d9534f',
-                backgroundColor: '#d9534f',
-                tension: 0.2,
-                spanGaps: true
+                tension: 0.2
+            },
+            {
+                label: 'Rouge HP',
+                data: [],
+                borderColor: '#d9534f',
+                borderDash: [5, 5],
+                tension: 0.2
             }
         ]
     },
@@ -193,29 +228,39 @@ const chart = new Chart(canvas, {
     }
 });
 
-function afficherTarifs(tarifs) {
-    // Regroupe par date de début : { '2026-01-01': { bleu: 0.1, blanc: 0.2, rouge: 0.3 } }
+function afficherTarifs(puissance) {
+    // 1. Filtrer sur la puissance choisie
+    const tarifs = tousLesTarifs.filter(t => t.puissance === puissance);
+
+    // 2. Regrouper par dateDebut : { "2025-01-01": { bleu_HC: 0.1296, ... }, ... }
     const parDate = {};
 
-    tarifs.filter(t => t.type === 'HC').forEach(t => {
-            if (!parDate[t.dateDebut]) {
-                parDate[t.dateDebut] = {};
-            }
-            // On garde la première valeur rencontrée (puissance ignorée)
-            if (parDate[t.dateDebut][t.couleur] === undefined) {
-                parDate[t.dateDebut][t.couleur] = Number(t.tarif);
-            }
-        });
+    tarifs.forEach(t => {
+        const cle = `${t.couleur.toUpperCase()}_${t.type.toUpperCase()}`;
 
-    // Les dates au format Y-m-d se trient correctement par ordre alphabétique
+        if (!(cle in INDEX_DATASETS)){
+            
+            console.log(`Combinaison inconnue ${cle}`)
+            return; // combinaison inconnue : on ignore
+        }
+        
+        if (!parDate[t.dateDebut]) {
+            parDate[t.dateDebut] = {};
+        }
+        // Plusieurs plages possibles pour une même couleur/type : le tarif est le même, on écrase
+        parDate[t.dateDebut][cle] = parseFloat(t.tarif);
+    });
+
+    // 3. Trier les dates (le format Y-m-d se trie correctement en texte)
     const dates = Object.keys(parDate).sort();
 
+    // 4. Remplir le graphe
     chart.data.labels = dates;
-    chart.data.datasets[0].data = dates.map(d => parDate[d].bleu  ?? null);
-    chart.data.datasets[1].data = dates.map(d => parDate[d].blanc ?? null);
-    chart.data.datasets[2].data = dates.map(d => parDate[d].rouge ?? null);
 
-    console.log("test")
+    chart.data.datasets.forEach((dataset, index) => {
+        const cle = Object.keys(INDEX_DATASETS).find(k => INDEX_DATASETS[k] === index);
+        dataset.data = dates.map(date => parDate[date][cle] ?? null);
+    });
 
     chart.update();
 }
