@@ -325,14 +325,17 @@ body {
     background-color: white;
     color: #444;
 
-    font-size: 24px;
-    line-height: 1;
-
     cursor: pointer;
 }
 
 .refresh-button:hover {
     background-color: #f1f1f1;
+}
+
+.refresh-button .material-symbols-outlined {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1;
 }
 
 
