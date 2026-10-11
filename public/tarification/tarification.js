@@ -93,70 +93,31 @@ function afficherTarifs(puissance) {
     chart.update();
 }
 
+const puissances = [...new Set(grilles.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
 
-async function getPuissances(){
-     try{
-        const response = await fetch(`${API_URL}/puissances`)
-        const resultat = await response.json();
+const dateMin = grilles.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
 
-        if (!response.ok) {
-            throw new Error(
-                resultat.message
-                || resultat.error
-                || `Erreur HTTP ${response.status}`
-            );
-        }
-        if(resultat.length === 0){
-            console.log("La liste de tarifs est vide");
-        }else{
+const dateMax = grilles.some(g => g.dateFin === null) ? null : grilles.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
 
-            resultat.forEach(element => {
-                const option = document.createElement("option");
 
-                option.value = element;
-                option.textContent = `${element} kVA`;
+puissances.forEach(element => {
+    const option = document.createElement("option");
 
-                listePuissances.appendChild(option);
-            });
-          
-        }
-    } catch (error)  {
-        console.error("Erreur lors de la récupération des imports :", error);
-    }
-}
+    option.value = element;
+    option.textContent = `${element} kVA`;
+
+    listePuissances.appendChild(option);
+});
 
 listePuissances.addEventListener("change", (event) => {
     puissanceChoisie = Number(event.target.value);
-
     afficherTarifs(puissanceChoisie);
 });
 
 
-async function getExtremeDates(){
-    try{
-        const response = await fetch(`${API_URL}/bornes-dates`)
-        const resultat = await response.json();
+dateMAJ.textContent = formatDate(dateMax);
 
-        if (!response.ok) {
-            throw new Error(
-                resultat.message
-                || resultat.error
-                || `Erreur HTTP ${response.status}`
-            );
-        }
-        if(resultat.length === 0){
-            console.log("La liste de tarifs est vide");
-        }else{
-
-            dateMAJ.textContent = formatDate(resultat.dateMax);
-
-            spanPeriode.textContent = `${formatDate(resultat.dateMin)} → ${formatDate(resultat.dateMax)}`;
-                        
-        }
-    } catch (error)  {
-        console.error("Erreur lors de la récupération des imports :", error);
-    }
-}
+spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
 
 /*
  * Formatage des dates
