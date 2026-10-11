@@ -110,8 +110,6 @@ async function getPuissances(){
             console.log("La liste de tarifs est vide");
         }else{
 
-            console.log(resultat);
-
             resultat.forEach(element => {
                 const option = document.createElement("option");
 
@@ -122,7 +120,6 @@ async function getPuissances(){
             });
           
         }
-
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
     }
@@ -151,14 +148,11 @@ async function getExtremeDates(){
             console.log("La liste de tarifs est vide");
         }else{
 
-            console.log(resultat);
-
             dateMAJ.textContent = formatDate(resultat.dateMax);
 
             spanPeriode.textContent = `${formatDate(resultat.dateMin)} → ${formatDate(resultat.dateMax)}`;
                         
-    }
-
+        }
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
     }
