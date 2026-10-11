@@ -239,7 +239,8 @@ async function listImports(){
                     </tr>`
         });
 
-
+        console.log(document.getElementById("history-table-content").children);
+        
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
     }
