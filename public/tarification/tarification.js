@@ -125,7 +125,7 @@ function ajouterPuissances(){
 
 }
 
-function getTarifsRecents(puissance) {
+function afficherTarifsRecents(puissance) {
   const lignes = tousLesTarifs.filter(t => t.puissance === puissance);
   if (lignes.length === 0) return [];
 
