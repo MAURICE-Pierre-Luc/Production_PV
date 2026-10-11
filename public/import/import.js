@@ -11,8 +11,7 @@ if (sessionStorage.getItem("loggedIn") !== "true") {
  * Configuration de l'API
  */
 
-// À adapter si la route de ton ImportController est différente.
-const API_URL = "/api/import";
+const API_URL = "/api/import/";
 
 
 /*
@@ -30,6 +29,16 @@ const removeFileButton = document.getElementById("remove-file");
 const fileError = document.getElementById("file-error");
 const importButton = document.getElementById("import-button");
 const importStatus = document.getElementById("import-status");
+
+const historyTableContent = document.getElementById("history-table-content");
+
+
+/*
+ * On récupère les imports déja faits
+ */
+
+listImports();
+
 
 
 /*
@@ -147,7 +156,7 @@ importButton.addEventListener("click", async function () {
     formData.append("file", file);
 
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${API_URL}file`, {
             method: "POST",
             body: formData
         });
@@ -195,4 +204,42 @@ importButton.addEventListener("click", async function () {
     }
 });
 
+/*
+* Liste des fichiers importés
+*/ 
 
+async function listImports(){
+
+    try{
+        const response = await fetch(`${API_URL}list`)
+
+        // Lecture de la réponse JSON de Symfony.
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+
+        console.log(resultat);
+
+
+        resultat.forEach(element => {
+            historyTableContent.appendChild = `
+                    <tr>
+                        <td> ${element[0]} </td>
+                        <td> ${element[1]}</td>
+                        <td> ${element[2]}</td>
+                        <td> ${element[3]}</td>
+                    </tr>`
+        });
+
+
+    } catch (error)  {
+        console.error("Erreur lors de la récupération des imports :", error);
+    }
+
+}

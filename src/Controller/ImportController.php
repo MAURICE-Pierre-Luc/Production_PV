@@ -5,7 +5,10 @@ namespace App\Controller;
 use App\Entity\Import;
 use App\Enum\StatutImport;
 use App\Message\ProcessImport;
+use App\Repository\ImportRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -19,12 +22,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ImportController extends AbstractController
 {
-    #[Route('/api/import', name: 'app_import', methods: ['POST'])]
-    public function import(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        MessageBusInterface $bus
-    ): JsonResponse {
+    #[Route('/api/import/file', name: 'app_import_file', methods: ['POST'])]
+    public function importFile( Request $request, EntityManagerInterface $entityManager, MessageBusInterface $bus): JsonResponse {
+        
         $fichier = $request->files->get('file');
 
         // Vérification de la présence du fichier
@@ -92,5 +92,19 @@ class ImportController extends AbstractController
             'importId' => $import->getId(),
             'statut' => $import->getStatut()->value
         ], 202);
+    }
+
+    #[Route('/api/import/list', name: 'app_import_list', methods: ['GET'])]
+    public function importedFiles(ImportRepository $importRepository): JsonResponse {
+        $imports = $importRepository->findBy([], ['dateImport' => 'DESC']);
+
+        $data = array_map(static fn ($import) => [
+            'nomFichier'       => $import->getNomFichier(),
+            'dateDebutDonnees' => $import->getDateDebutDonnees()?->format('Y-m-d'),
+            'dateFinDonnees'   => $import->getDateFinDonnees()?->format('Y-m-d'),
+            'statut'           => $import->getStatut()?->value,
+        ], $imports);
+
+        return $this->json($data);
     }
 }
