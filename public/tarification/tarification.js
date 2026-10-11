@@ -93,41 +93,7 @@ function afficherTarifs(puissance) {
     chart.update();
 }
 
-const puissances = [...new Set(tousLesTarifs.map(g => g.puissance))]
-  .filter(p => p !== null)
-  .sort((a, b) => a - b);
 
-console.log(puissances)
-
-const dateMin = tousLesTarifs.reduce((min, g) =>
-  !min || g.dateDebut < min ? g.dateDebut : min, null);
-
-console.log(dateMin);
-
-const dateMax = tousLesTarifs.some(g => g.dateFin === null)
-  ? null // au moins une grille encore en vigueur
-  : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
-
-console.log(dateMax);
-
-puissances.forEach(element => {
-    const option = document.createElement("option");
-
-    option.value = element;
-    option.textContent = `${element} kVA`;
-
-    listePuissances.appendChild(option);
-});
-
-listePuissances.addEventListener("change", (event) => {
-    puissanceChoisie = Number(event.target.value);
-    afficherTarifs(puissanceChoisie);
-});
-
-
-dateMAJ.textContent = formatDate(dateMax);
-
-spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
 
 /*
  * Formatage des dates
@@ -322,3 +288,30 @@ chart.data.datasets.forEach((dataset, index) => {
 
 
 getTarifs();
+
+
+const puissances = [...new Set(tousLesTarifs.map(g => g.puissance))].filter(p => p !== null).sort((a, b) => a - b);
+
+const dateMin = tousLesTarifs.reduce((min, g) => !min || g.dateDebut < min ? g.dateDebut : min, null);
+
+const dateMax = tousLesTarifs.some(g => g.dateFin === null) ? null : tousLesTarifs.reduce((max, g) => !max || g.dateFin > max ? g.dateFin : max, null);
+
+
+puissances.forEach(element => {
+    const option = document.createElement("option");
+
+    option.value = element;
+    option.textContent = `${element} kVA`;
+
+    listePuissances.appendChild(option);
+});
+
+listePuissances.addEventListener("change", (event) => {
+    puissanceChoisie = Number(event.target.value);
+    afficherTarifs(puissanceChoisie);
+});
+
+
+dateMAJ.textContent = formatDate(dateMax);
+
+spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
