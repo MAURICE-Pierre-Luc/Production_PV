@@ -1,38 +1,56 @@
 /*
- * Données temporaires.
- *
- * Elles seront remplacées par les données
- * récupérées depuis l'API Symfony.
+ * Configuration de l'API
  */
 
-const tariffData = {
-
-    blue: {
-        hc: "---",
-        hp: "---"
-    },
-
-    white: {
-        hc: "---",
-        hp: "---"
-    },
-
-    red: {
-        hc: "---",
-        hp: "---"
-    },
-
-    subscribedPower: "---"
-};
+const API_URL = "/api/grille-tarifaire";
 
 
 /*
- * Éléments HTML
+ * Recuperation des tarifs
  */
 
-const startDateInput = document.getElementById("start-date");
-const endDateInput = document.getElementById("end-date");
-const applyButton = document.getElementById("apply-period");
+
+async function getTarifs(){
+
+    try{
+        const response = await fetch(`${API_URL}`)
+
+        // Lecture de la réponse JSON de Symfony.
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+
+        console.log(resultat);
+
+        if(resultat.length === 0){
+            console.log("La liste de tarifs est vide");
+        }else{
+
+
+            // resultat.map(element => `
+            //     <tr>
+            //         <td>${element.nomFichier ?? "---"}</td>
+            //         <td>${element.dateDebutDonnees ?? "---"}</td>
+            //         <td>${element.dateFinDonnees ?? "---"}</td>
+            //         <td>${element.statut ?? "---"}</td>
+            //     </tr>
+            // `).join("");
+        }
+
+    } catch (error)  {
+        console.error("Erreur lors de la récupération des imports :", error);
+    }
+
+
+}
+
+getTarifs();
 
 
 /*
@@ -51,7 +69,7 @@ function formatDate(date) {
         return "--/--/----";
     }
 
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return `${parts[0]}/${parts[1]}/${parts[2]}`;
 }
 
 
@@ -61,29 +79,22 @@ function formatDate(date) {
 
 function displayTariffs() {
 
-    document.getElementById("blue-hc").textContent =
-        tariffData.blue.hc;
+    document.getElementById("blue-hc").textContent = tariffData.blue.hc;
 
-    document.getElementById("blue-hp").textContent =
-        tariffData.blue.hp;
+    document.getElementById("blue-hp").textContent = tariffData.blue.hp;
 
 
-    document.getElementById("white-hc").textContent =
-        tariffData.white.hc;
+    document.getElementById("white-hc").textContent = tariffData.white.hc;
 
-    document.getElementById("white-hp").textContent =
-        tariffData.white.hp;
+    document.getElementById("white-hp").textContent = tariffData.white.hp;
 
 
-    document.getElementById("red-hc").textContent =
-        tariffData.red.hc;
+    document.getElementById("red-hc").textContent = tariffData.red.hc;
 
-    document.getElementById("red-hp").textContent =
-        tariffData.red.hp;
+    document.getElementById("red-hp").textContent = tariffData.red.hp;
 
 
-    document.getElementById("subscribed-power").textContent =
-        tariffData.subscribedPower;
+    document.getElementById("subscribed-power").textContent = tariffData.subscribedPower;
 }
 
 
@@ -91,7 +102,7 @@ function displayTariffs() {
  * Mise à jour de la période affichée
  */
 
-function updatePeriod() {
+async function updatePeriod() {
 
     const startDate = startDateInput.value;
     const endDate = endDateInput.value;
@@ -105,65 +116,91 @@ function updatePeriod() {
         return;
     }
 
-    const periodText =
-        `${formatDate(startDate)} → ${formatDate(endDate)}`;
+    const periodText = `${formatDate(startDate)} → ${formatDate(endDate)}`;
 
-    document.getElementById("selected-period").textContent =
-        periodText;
-
-    document.getElementById("chart-period").textContent =
-        periodText;
-
-
-    /*
-     * Plus tard :
-     *
-     * fetch(`/api/tarifs?debut=${startDate}&fin=${endDate}`)
-     *
-     * permettra de récupérer les tarifs historiques
-     * depuis l'API Symfony.
-     */
 
     displayTariffs();
 }
-
-
-/*
- * Bouton "Afficher"
- */
-
-applyButton.addEventListener("click", updatePeriod);
-
-
-/*
- * Dates par défaut :
- * début de l'année jusqu'à aujourd'hui.
- */
-
-const today = new Date();
-
-const year = today.getFullYear();
-
-const firstDayOfYear =
-    `${year}-01-01`;
-
-const currentDate =
-    today.toISOString().split("T")[0];
-
-startDateInput.value = firstDayOfYear;
-endDateInput.value = currentDate;
-
-
-/*
- * Date de dernière mise à jour temporaire.
- */
-
-document.getElementById("last-update").textContent =
-    today.toLocaleDateString("fr-FR");
-
 
 /*
  * Initialisation
  */
 
 updatePeriod();
+
+
+
+
+
+
+
+
+
+
+
+const canvas = document.getElementById('tariff-chart');
+
+const chart = new Chart(canvas, {
+    type: 'line',
+
+    data: {
+        labels: [],
+
+        datasets: [
+            {
+                label: 'Tarif bleu HC',
+                data: [],
+                borderColor: '#4385d8',
+                backgroundColor: '#4385d8',
+                tension: 0.2
+            },
+            {
+                label: 'Tarif blanc HC',
+                data: [],
+                borderColor: '#999999',
+                backgroundColor: '#999999',
+                tension: 0.2
+            },
+            {
+                label: 'Tarif rouge HC',
+                data: [],
+                borderColor: '#d9534f',
+                backgroundColor: '#d9534f',
+                tension: 0.2
+            }
+        ]
+    },
+
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        scales: {
+            y: {
+                beginAtZero: true,
+
+                title: {
+                    display: true,
+                    text: 'Prix (€/kWh)'
+                }
+            },
+
+            x: {
+                title: {
+                    display: true,
+                    text: 'Date'
+                }
+            }
+        }
+    }
+});
+
+function ajouterTarifs(date, bleuHC, blancHC, rougeHC) {
+    chart.data.labels.push(date);
+
+    chart.data.datasets[0].data.push(bleuHC);
+    chart.data.datasets[1].data.push(blancHC);
+    chart.data.datasets[2].data.push(rougeHC);
+
+    chart.update();
+}

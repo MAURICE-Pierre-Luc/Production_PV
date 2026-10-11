@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="../common/header.css">
     <link rel="stylesheet" href="tarification.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="../common/header.js" defer></script>
     <script src="tarification.js" defer></script>
 </head>
@@ -33,43 +35,12 @@
     </section>
 
 
-    <!-- Sélection de période -->
-
-    <section class="period-selector">
-
-        <div class="date-field">
-            <label for="start-date">Date de début</label>
-            <input type="date" id="start-date">
-        </div>
-
-        <div class="date-field">
-            <label for="end-date">Date de fin</label>
-            <input type="date" id="end-date">
-        </div>
-
-        <button id="apply-period" class="button">
-            Afficher
-        </button>
-
-    </section>
-
-
-    <!-- Période sélectionnée -->
-
-    <div class="selected-period">
-        Période :
-        <strong id="selected-period">
-            --/--/---- → --/--/----
-        </strong>
-    </div>
-
-
     <!-- Tarif actuel -->
 
     <section class="section">
 
         <h2 class="section-title">
-            Grille tarifaire
+            Grille tarifaire aujourd'hui
         </h2>
 
         <div class="tariff-table-container">
@@ -152,44 +123,10 @@
                 Évolution des tarifs
             </h2>
 
-            <span id="chart-period">
-                --/--/---- → --/--/----
-            </span>
-
         </div>
 
-
         <div class="chart-container">
-
-            <div class="chart-placeholder">
-
-                <div class="chart-y-axis">
-                    <span>1,50 €</span>
-                    <span>1,20 €</span>
-                    <span>0,90 €</span>
-                    <span>0,60 €</span>
-                    <span>0,30 €</span>
-                    <span>0 €</span>
-                </div>
-
-
-                <div class="chart-area">
-
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-
-                    <div class="chart-message">
-                        Graphique d'évolution des tarifs
-                    </div>
-
-                </div>
-
-            </div>
-
+            <canvas id="tariff-chart"></canvas>
         </div>
 
     </section>
