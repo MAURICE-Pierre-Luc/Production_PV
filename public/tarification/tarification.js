@@ -6,6 +6,7 @@ const API_URL = "/api/grille-tarifaire";
 
 
 const canvas = document.getElementById('tariff-chart');
+const listePuissances =  document.getElementById('subscribed-power');
 
 let puissanceChoisie = 6;   // variable modifiable (kVA)
 let tousLesTarifs = [];     // on garde les données pour ne pas refaire l'appel API
@@ -64,9 +65,6 @@ async function getTarifs(){
 }
 
 
-
-
-
 function afficherTarifs(puissance) {
     // 1. Filtrer sur la puissance choisie
     const tarifs = tousLesTarifs.filter(t => t.puissance === puissance);
@@ -105,7 +103,44 @@ function afficherTarifs(puissance) {
 }
 
 
-getTarifs();
+async function getPuissances(){
+
+     try{
+        const response = await fetch(`${API_URL}/puissances`)
+
+        // Lecture de la réponse JSON de Symfony.
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+
+        if(resultat.length === 0){
+            console.log("La liste de tarifs est vide");
+        }else{
+
+            console.log(resultat);
+
+            resultat.forEach(element => {
+                listePuissances.appendChild(document.createElement(`<option value="${element}">${element} kVA</option>`))
+            });
+            
+        }
+
+    } catch (error)  {
+        console.error("Erreur lors de la récupération des imports :", error);
+    }
+}
+
+listePuissances.addEventListener("change", (event) => {
+    puissanceChoisie = Number(event.target.value);
+
+    afficherTarifs(puissanceChoisie);
+});
 
 
 /*
@@ -330,3 +365,6 @@ chart.data.datasets.forEach((dataset, index) => {
 });
 
 
+getPuissances();
+
+getTarifs();

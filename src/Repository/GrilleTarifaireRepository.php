@@ -52,4 +52,16 @@ class GrilleTarifaireRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function findDistinctPuissances(): array
+    {
+        $result = $this->createQueryBuilder('g')
+            ->select('DISTINCT g.puissance')
+            ->where('g.puissance IS NOT NULL')
+            ->orderBy('g.puissance', 'ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        return array_map('intval', $result);
+    }
 }

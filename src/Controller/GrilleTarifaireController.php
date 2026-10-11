@@ -28,4 +28,10 @@ class GrilleTarifaireController extends AbstractController
 
         return $this->json($data);
     }
+
+    #[Route('/api/grille-tarifaire/puissances', name: 'api_grille_tarifaire_puissances', methods: ['GET'])]
+    public function puissances(GrilleTarifaireRepository $grilleTarifaireRepository): JsonResponse
+    {
+        return $this->json($grilleTarifaireRepository->findDistinctPuissances());
+    }
 }
