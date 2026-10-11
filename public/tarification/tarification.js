@@ -197,12 +197,21 @@ function mettreEnEvidence(chart, indicesActifs) {
             || indicesActifs.includes(index);
 
         const couleur = COULEURS_ORIGINALES[index];
-
-        dataset.borderColor = actif
+        const couleurAffichee = actif
             ? couleur
             : couleur + '33';
 
+        // Ligne
+        dataset.borderColor = couleurAffichee;
         dataset.borderWidth = actif ? 4 : 2;
+
+        // Points
+        dataset.pointBackgroundColor = couleurAffichee;
+        dataset.pointBorderColor = couleurAffichee;
+
+        // Point survolé
+        dataset.pointHoverBackgroundColor = couleur;
+        dataset.pointHoverBorderColor = couleur;
     });
 
     chart.update('none');
