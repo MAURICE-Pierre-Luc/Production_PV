@@ -136,8 +136,6 @@ function afficherTarifsRecent(puissance) {
   console.log(result);
 }
 
-// Utilisation
-const tarifs = getTarifsRecents(tousLesTarifs, 6);
 
 listePuissances.addEventListener("change", (event) => {
     puissanceChoisie = Number(event.target.value);
