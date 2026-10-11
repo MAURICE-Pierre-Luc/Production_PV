@@ -226,21 +226,18 @@ async function listImports(){
 
         console.log(resultat);
 
-        console.log(document.getElementById("history-table-content").children);
 
 
         resultat.forEach(element => {
             historyTableContent.appendChild = `
                     <tr>
-                        <td> ${element[0]} </td>
-                        <td> ${element[1]}</td>
-                        <td> ${element[2]}</td>
-                        <td> ${element[3]}</td>
+                        <td> ${element["nomFichier"]} </td>
+                        <td> ${element["dateDebutDonnees"]}</td>
+                        <td> ${element["dateFinDonnees"]}</td>
+                        <td> ${element["statut"]}</td>
                     </tr>`
         });
 
-        console.log(document.getElementById("history-table-content").children);
-        
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
     }
