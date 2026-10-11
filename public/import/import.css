@@ -267,7 +267,9 @@ body {
 }
 
 .history-table-container {
-    overflow: hidden;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
 
     background-color: white;
 
