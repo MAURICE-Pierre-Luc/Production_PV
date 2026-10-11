@@ -316,7 +316,12 @@ const chart = new Chart(canvas, {
                     text: 'Date'
                 }
             }
-        }
+        },
+        interaction: {
+            mode: 'nearest',
+            intersect: false,
+            axis: 'xy'
+        },
     }
 });
 
