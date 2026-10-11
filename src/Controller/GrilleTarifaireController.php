@@ -34,4 +34,11 @@ class GrilleTarifaireController extends AbstractController
     {
         return $this->json($grilleTarifaireRepository->findDistinctPuissances());
     }
+
+    #[Route('/api/grille-tarifaire/bornes-dates', name: 'api_grille_tarifaire_bornes_dates', methods: ['GET'])]
+    public function bornesDates(GrilleTarifaireRepository $grilleTarifaireRepository): JsonResponse
+    {
+        return $this->json($grilleTarifaireRepository->findBornesDates());
+    }
+    
 }

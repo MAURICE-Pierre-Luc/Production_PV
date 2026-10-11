@@ -7,6 +7,8 @@ const API_URL = "/api/grille-tarifaire";
 
 const canvas = document.getElementById('tariff-chart');
 const listePuissances =  document.getElementById('subscribed-power');
+const dateMAJ = document.getElementById('last-update');
+const spanPeriode = document.getElementById('chart-period')
 
 let puissanceChoisie = 6;   // variable modifiable (kVA)
 let tousLesTarifs = [];     // on garde les données pour ne pas refaire l'appel API
@@ -148,80 +150,82 @@ listePuissances.addEventListener("change", (event) => {
 });
 
 
+async function getExtremeDates(){
+
+    try{
+        const response = await fetch(`${API_URL}/bornes-dates`)
+
+        // Lecture de la réponse JSON de Symfony.
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+
+        if(resultat.length === 0){
+            console.log("La liste de tarifs est vide");
+        }else{
+
+            console.log(resultat);
+
+            dateMAJ.textContent = formatDate(resultat.dateMax);
+
+            spanPeriode.textContent = `${formatDate(startDate)} → ${formatDate(endDate)}`;
+                        
+    }
+
+    } catch (error)  {
+        console.error("Erreur lors de la récupération des imports :", error);
+    }
+}
+
 /*
  * Formatage des dates
  */
 
-// function formatDate(date) {
+function formatDate(date) {
 
-//     if (!date) {
-//         return "--/--/----";
-//     }
+    if (!date) {
+        return "--/--/----";
+    }
 
-//     const parts = date.split("-");
+    const parts = date.split("-");
 
-//     if (parts.length !== 3) {
-//         return "--/--/----";
-//     }
+    if (parts.length !== 3) {
+        return "--/--/----";
+    }
 
-//     return `${parts[0]}/${parts[1]}/${parts[2]}`;
-// }
+    return `${parts[0]}/${parts[1]}/${parts[2]}`;
+}
 
 
 /*
  * Affichage des tarifs
  */
 
-// function displayTariffs() {
+function displayTariffs() {
 
-//     document.getElementById("blue-hc").textContent = tariffData.blue.hc;
+    document.getElementById("blue-hc").textContent = tariffData.blue.hc;
 
-//     document.getElementById("blue-hp").textContent = tariffData.blue.hp;
-
-
-//     document.getElementById("white-hc").textContent = tariffData.white.hc;
-
-//     document.getElementById("white-hp").textContent = tariffData.white.hp;
+    document.getElementById("blue-hp").textContent = tariffData.blue.hp;
 
 
-//     document.getElementById("red-hc").textContent = tariffData.red.hc;
+    document.getElementById("white-hc").textContent = tariffData.white.hc;
 
-//     document.getElementById("red-hp").textContent = tariffData.red.hp;
-
-
-//     document.getElementById("subscribed-power").textContent = tariffData.subscribedPower;
-// }
+    document.getElementById("white-hp").textContent = tariffData.white.hp;
 
 
-// /*
-//  * Mise à jour de la période affichée
-//  */
+    document.getElementById("red-hc").textContent = tariffData.red.hc;
 
-// async function updatePeriod() {
-
-//     const startDate = startDateInput.value;
-//     const endDate = endDateInput.value;
-
-//     if (!startDate || !endDate) {
-//         return;
-//     }
-
-//     if (startDate > endDate) {
-//         alert("La date de début doit être antérieure à la date de fin.");
-//         return;
-//     }
-
-//     const periodText = `${formatDate(startDate)} → ${formatDate(endDate)}`;
+    document.getElementById("red-hp").textContent = tariffData.red.hp;
 
 
-//     displayTariffs();
-// }
-
-// /*
-//  * Initialisation
-//  */
-
-// updatePeriod();
+    document.getElementById("subscribed-power").textContent = tariffData.subscribedPower;
+}
 
 
 // Associe chaque courbe à sa couleur Tempo

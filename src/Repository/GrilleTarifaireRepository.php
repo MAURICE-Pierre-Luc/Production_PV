@@ -64,4 +64,17 @@ class GrilleTarifaireRepository extends ServiceEntityRepository
 
         return array_map('intval', $result);
     }
+
+    public function findBornesDates(): array
+    {
+        $result = $this->createQueryBuilder('g')
+            ->select('MIN(g.dateDebut) AS dateMin', 'MAX(g.dateFin) AS dateMax')
+            ->getQuery()
+            ->getSingleResult();
+
+        return [
+            'dateMin' => $result['dateMin'],
+            'dateMax' => $result['dateMax'],
+        ];
+    }
 }
