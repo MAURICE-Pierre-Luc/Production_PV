@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Production solaire - Période</title>
 
     <link rel="stylesheet" href="../common/header.css">
     <link rel="stylesheet" href="production.css">
+    <link rel="stylesheet" href="production-extra.css">
 
     <script src="../common/header.js" defer></script>
     <script src="production.js" defer></script>
@@ -15,190 +16,133 @@
 
 <body>
 
-<header id="header"></header>
+    <header id="header"></header>
 
+    <main class="main-container">
 
-<main class="main-container">
+        <section class="page-header">
+            <h1>Production et consommation</h1>
+            <p>Sélectionnez une période pour consulter les données de l'installation.</p>
+        </section>
 
-    <section class="page-header">
-        <h1>Production et consommation</h1>
-
-        <p>
-            Sélectionnez une période pour consulter les données de l'installation.
-        </p>
-    </section>
-
-
-    <!-- Sélection de la période -->
-
-    <section class="period-selector">
-
-        <div class="date-field">
-            <label for="start-date">Date de début</label>
-            <input type="date" id="start-date">
-        </div>
-
-        <div class="date-field">
-            <label for="end-date">Date de fin</label>
-            <input type="date" id="end-date">
-        </div>
-
-        <button id="apply-period" class="button">
-            Afficher
-        </button>
-
-    </section>
-
-
-    <!-- Période actuellement affichée -->
-
-    <section class="selected-period">
-
-        <span>Période sélectionnée :</span>
-
-        <strong id="selected-period">
-            --/--/---- → --/--/----
-        </strong>
-
-    </section>
-
-
-    <!-- Statistiques -->
-
-    <section class="stats-grid">
-
-        <article class="stat-card">
-            <h2>Production</h2>
-
-            <div class="stat-value">
-                <span id="production">---</span>
-                <span class="stat-unit">kWh</span>
+        <section class="period-selector">
+            <div class="date-field">
+                <label for="start-date">Date de début</label>
+                <input type="date" id="start-date">
             </div>
-        </article>
-
-
-        <article class="stat-card">
-            <h2>Consommation</h2>
-
-            <div class="stat-value">
-                <span id="consumption">---</span>
-                <span class="stat-unit">kWh</span>
+            <div class="date-field">
+                <label for="end-date">Date de fin</label>
+                <input type="date" id="end-date">
             </div>
-        </article>
+            <button id="apply-period" class="button">Afficher</button>
+        </section>
 
+        <section class="selected-period">
+            <span>Période sélectionnée :</span>
+            <strong id="selected-period">--/--/---- → --/--/----</strong>
+        </section>
 
-        <article class="stat-card">
-            <h2>Énergie injectée</h2>
+        <!-- Sous-pages -->
+        <nav class="tabs" role="tablist">
+            <button class="tab active" role="tab" data-tab="overview">Vue d'ensemble</button>
+            <button class="tab" role="tab" data-tab="profit">Rentabilité</button>
+            <button class="tab" role="tab" data-tab="autonomy">Autonomie</button>
+        </nav>
 
-            <div class="stat-value">
-                <span id="exported">---</span>
-                <span class="stat-unit">kWh</span>
-            </div>
-        </article>
+        <!-- ===== Vue d'ensemble ===== -->
+        <div class="tab-panel active" id="panel-overview">
 
+            <section class="stats-grid">
+                <article class="stat-card">
+                    <h2>Production</h2>
+                    <div class="stat-value"><span id="production">---</span> <span class="stat-unit">kWh</span></div>
+                </article>
+                <article class="stat-card">
+                    <h2>Consommation</h2>
+                    <div class="stat-value"><span id="consumption">---</span> <span class="stat-unit">kWh</span></div>
+                </article>
+                <article class="stat-card">
+                    <h2>Énergie autoconsommée</h2>
+                    <div class="stat-value"><span id="self-kwh">---</span> <span class="stat-unit">kWh</span></div>
+                </article>
+                <article class="stat-card">
+                    <h2>Énergie importée</h2>
+                    <div class="stat-value"><span id="imported">---</span> <span class="stat-unit">kWh</span></div>
+                </article>
+            </section>
 
-        <article class="stat-card">
-            <h2>Énergie importée</h2>
-
-            <div class="stat-value">
-                <span id="imported">---</span>
-                <span class="stat-unit">kWh</span>
-            </div>
-        </article>
-
-    </section>
-
-
-    <!-- Graphique -->
-
-    <section class="section">
-
-        <div class="section-header">
-            <h2>Production journalière</h2>
-
-            <span id="chart-period">
-                --/--/---- → --/--/----
-            </span>
-        </div>
-
-
-        <div class="chart-container">
-
-            <div class="chart-placeholder">
-
-                <div class="chart-y-axis">
-                    <span>10 kWh</span>
-                    <span>7,5 kWh</span>
-                    <span>5 kWh</span>
-                    <span>2,5 kWh</span>
-                    <span>0 kWh</span>
+            <section class="section">
+                <div class="section-header">
+                    <h2>Graphique</h2>
+                    <span id="chart-period">--/--/---- → --/--/----</span>
                 </div>
+                <div class="chart-container" id="chart-overview"></div>
+            </section>
 
-                <div class="chart-area">
-
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-
-                    <div class="chart-message">
-                        Graphique de production
+            <section class="section">
+                <h2>Détails de la période</h2>
+                <div class="details-grid">
+                    <div class="detail-item"><span>Production moyenne journalière</span>
+                        <strong><span id="average-production">---</span> kWh</strong>
                     </div>
-
+                    <div class="detail-item"><span>Meilleure journée</span>
+                        <strong><span id="best-day">--/--/----</span></strong>
+                    </div>
+                    <div class="detail-item"><span>Production maximale</span>
+                        <strong><span id="max-production">---</span> kWh</strong>
+                    </div>
+                    <div class="detail-item"><span>Part de la conso couverte par le solaire</span>
+                        <strong><span id="self-consumption">---</span> %</strong>
+                    </div>
                 </div>
-
-            </div>
-
+            </section>
         </div>
 
-    </section>
-
-
-    <!-- Détails -->
-
-    <section class="section">
-
-        <h2>Détails de la période</h2>
-
-        <div class="details-grid">
-
-            <div class="detail-item">
-                <span>Production moyenne journalière</span>
-                <strong>
-                    <span id="average-production">---</span> kWh
-                </strong>
-            </div>
-
-            <div class="detail-item">
-                <span>Meilleure journée</span>
-                <strong>
-                    <span id="best-day">--/--/----</span>
-                </strong>
-            </div>
-
-            <div class="detail-item">
-                <span>Production maximale</span>
-                <strong>
-                    <span id="max-production">---</span> kWh
-                </strong>
-            </div>
-
-            <div class="detail-item">
-                <span>Taux d'autoconsommation</span>
-                <strong>
-                    <span id="self-consumption">---</span> %
-                </strong>
-            </div>
-
+        <!-- ===== Rentabilité ===== -->
+        <div class="tab-panel" id="panel-profit">
+            <section class="section">
+                <h2>Paramètres de calcul</h2>
+                <form class="params" onsubmit="return false">
+                    <label>Puissance de l'abonnement<select data-param="puissance"></select></label>
+                    <p class="price-box">Prix HC : <strong class="price-hc">---</strong> €/kWh · Prix HP : <strong
+                            class="price-hp">---</strong> €/kWh<br><span>Tarifs récupérés via l'API pour cet
+                            abonnement</span></p>
+                </form>
+            </section>
+            <section class="stats-grid" id="kpi-profit"></section>
+            <section class="section charts-grid">
+                <div class="chart-container" id="chart-profit-split"></div>
+                <div class="chart-container" id="chart-mix-profit"></div>
+                <div class="chart-container" id="chart-cumul"></div>
+            </section>
         </div>
 
-    </section>
+        <!-- ===== Autonomie ===== -->
+        <div class="tab-panel" id="panel-autonomy">
+            <section class="section">
+                <h2>Paramètres de calcul</h2>
+                <form class="params" onsubmit="return false">
+                    <label>Puissance de l'abonnement<select data-param="puissance"></select></label>
+                    <p class="price-box">Prix HC : <strong class="price-hc">---</strong> €/kWh · Prix HP : <strong
+                            class="price-hp">---</strong> €/kWh<br><span>Tarifs récupérés via l'API pour cet
+                            abonnement</span></p>
+                </form>
+            </section>
+            <section class="stats-grid" id="kpi-autonomy"></section>
+            <section class="section">
+                <h2>Autoconsommation sur la période</h2>
+                <div class="table-wrap" id="stats-autonomy"></div>
+            </section>
+            <section class="section charts-grid">
+                <div class="chart-container" id="chart-conso-split"></div>
+                <div class="chart-container" id="chart-rate"></div>
+                <div class="chart-container" id="chart-mix-auto"></div>
+                <div class="chart-container" id="chart-soc"></div>
+                <div class="chart-container" id="chart-soh"></div>
+            </section>
+        </div>
 
-</main>
-
-
-
-
+    </main>
 </body>
+
 </html>
