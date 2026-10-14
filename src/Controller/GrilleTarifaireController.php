@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class GrilleTarifaireController extends AbstractController
 {
-    #[Route('/api/grille-tarifaire', name: 'api_grille_tarifaire_list', methods: ['GET'])]
+    #[Route('/api/grille-tarifaire/tarifs', name: 'api_grille_tarifaire_list', methods: ['GET'])]
     public function list(GrilleTarifaireRepository $grilleTarifaireRepository): JsonResponse
     {
         $grilles = $grilleTarifaireRepository->findAll();
@@ -29,4 +29,40 @@ class GrilleTarifaireController extends AbstractController
         return $this->json($data);
     }
 
+    #[Route('/api/grille-tarifaire/period', name: 'api_grille_tarifaire_periode', methods: ['GET'])]
+    public function parPeriode(Request $request, GrilleTarifaireRepository $repository): JsonResponse
+    {
+        $debut = \DateTime::createFromFormat('!Y-m-d', (string) $request->query->get('dateDebut'));
+        $fin   = \DateTime::createFromFormat('!Y-m-d', (string) $request->query->get('dateFin'));
+
+        if (!$debut || !$fin) {
+            return $this->json(
+                ['error' => 'Les paramètres dateDebut et dateFin sont obligatoires au format Y-m-d.'],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($debut > $fin) {
+            return $this->json(
+                ['error' => 'dateDebut doit être antérieure ou égale à dateFin.'],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+
+        $tarifs = $repository->findByPeriode($debut, $fin);
+
+        $data = array_map(static fn (GrilleTarifaire $t) => [
+            'id'         => $t->getId(),
+            'dateDebut'  => $t->getDateDebut()?->format('Y-m-d'),
+            'dateFin'    => $t->getDateFin()?->format('Y-m-d'),
+            'couleur'    => $t->getCouleur()?->value,
+            'deb'        => $t->getDeb()?->format('H:i:s'),
+            'fin'        => $t->getFin()?->format('H:i:s'),
+            'tarif'      => $t->getTarif(),
+            'type'       => $t->getType()?->value,
+            'puissance'  => $t->getPuissance(),
+        ], $tarifs);
+
+        return $this->json($data);
+    }
 }

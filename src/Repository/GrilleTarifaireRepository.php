@@ -53,4 +53,17 @@ class GrilleTarifaireRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function findByPeriode(\DateTimeInterface $debut, \DateTimeInterface $fin): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.dateDebut <= :fin')
+            ->andWhere('g.dateFin IS NULL OR g.dateFin >= :debut')
+            ->setParameter('debut', $debut, Types::DATE_MUTABLE)
+            ->setParameter('fin', $fin, Types::DATE_MUTABLE)
+            ->orderBy('g.dateDebut', 'ASC')
+            ->addOrderBy('g.deb', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }
