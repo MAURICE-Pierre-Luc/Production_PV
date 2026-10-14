@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\GrilleTarifaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
