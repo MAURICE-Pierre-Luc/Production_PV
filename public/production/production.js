@@ -4,9 +4,9 @@ const API_LINK_JOUR = "/api/jour";
 
 const API_LINK_TARIFS = "/api/grille-tarifaire";
 
-const dataPeriod = [];
+let dataPeriod = [];
 
-const tarifPeriod = [];
+let tarifPeriod = [];
 
 
 
@@ -27,6 +27,7 @@ async function getDataPeriod(dateDebut, dateFin){
             console.log("La liste de tarifs est vide");
         }else{
             
+            console.log(resultat);
             dataPeriod = resultat;
 
         }
@@ -53,8 +54,9 @@ async function getTarifsPeriod(dateDebut, dateFin){
             console.log("La liste de tarifs est vide");
         }else{
 
+            console.log(resultat);
             tarifPeriod = resultat;
-
+            
         }
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
@@ -63,10 +65,12 @@ async function getTarifsPeriod(dateDebut, dateFin){
 }
 
 
-document.getElementById('apply-period').addEventListener('click', async () => {
+document.getElementById('apply-period').addEventListener("click", async () => {
+    
     var dateDebut = document.getElementById('start-date').value;
     var dateFin = document.getElementById('end-date').value;
 
     getDataPeriod(dateDebut, dateFin);
     getTarifsPeriod(dateDebut, dateFin);
 })
+
