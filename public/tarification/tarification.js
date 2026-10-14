@@ -33,7 +33,7 @@ getTarifs();
 
 async function getTarifs(){
     try{
-        const response = await fetch(`${API_URL}`)
+        const response = await fetch(`${API_URL}/tarifs`)
         const resultat = await response.json();
 
         if (!response.ok) {
