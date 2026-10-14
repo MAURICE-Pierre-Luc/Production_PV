@@ -49,6 +49,11 @@ class JourController extends AbstractController
                 'energieImporteeHC' => $j->getEnergieImporteeHC(),
                 'energieImporteeHP' => $j->getEnergieImporteeHP(),
             ],
+
+            'consommation' => [
+                'energieConsommeeHC' => $j->getEnergieConsommeeHC(),
+                'energieConsommeeHP' => $j->getEnergieConsommeeHP(),
+            ],
             
             'batterie' => [
                 'socMin'         => $j->getSocMin(),

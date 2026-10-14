@@ -35,13 +35,21 @@ class Jour
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $productionHeurePuissanceMax = null;
 
-    // Consommation du réseau électrique
+    // Consommation sur le réseau électrique
 
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
     private ?string $energieImporteeHC = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
     private ?string $energieImporteeHP = null;
+
+    // Consommation électrique de la maison
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
+    private ?string $energieConsommeeHC = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
+    private ?string $energieConsommeeHP = null;
 
     // Batterie
 
@@ -151,7 +159,7 @@ class Jour
         return $this;
     }
 
-    // Consommation du réseau électrique
+    // Consommation sur le réseau électrique
 
     public function getEnergieImporteeHC(): ?string
     {
@@ -173,6 +181,32 @@ class Jour
     public function setEnergieImporteeHP(?string $energie): static
     {
         $this->energieImporteeHP = $energie;
+
+        return $this;
+    }
+
+    // Consommation électrique de la maison
+
+    public function getEnergieConsommeeHC(): ?string
+    {
+        return $this->energieConsommeeHC;
+    }
+
+    public function setEnergieConsommeeHC(?string $energie): static
+    {
+        $this->energieConsommeeHC = $energie;
+
+        return $this;
+    }
+
+    public function getEnergieConsommeeHP(): ?string
+    {
+        return $this->energieConsommeeHP;
+    }
+
+    public function setEnergieConsommeeHP(?string $energie): static
+    {
+        $this->energieConsommeeHP = $energie;
 
         return $this;
     }
