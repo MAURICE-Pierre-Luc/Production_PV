@@ -52,7 +52,7 @@ async function getTarifs(){
             afficherTarifs(puissanceDefaut);
             afficherDates();
             ajouterPuissances();
-            afficherTarifsRecents(puissanceDefaut)
+            afficherTarifsRecents(puissanceDefaut);
             
         }
     } catch (error)  {
