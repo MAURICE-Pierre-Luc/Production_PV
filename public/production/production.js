@@ -140,7 +140,7 @@ function globalview() {
     totalAutoConsommationElement.textContent = totalAutoConsommation;
     totalImportElement.textContent = totalImport;
 
-    averageDailyProductionElement.textContent = totalProduction/dataPeriod.length();
+    averageDailyProductionElement.textContent = totalProduction/dataPeriod.length;
     maximumDayProductionElement.textContent = maxProduction;
     bestProductionDayElement.textContent = formatDate(bestProductionDay);
     autoConsommationElement.textContent = Math.trunc((totalProduction/totalConsommation) * 100 * 100) / 100;
