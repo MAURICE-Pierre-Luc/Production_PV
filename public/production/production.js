@@ -95,11 +95,11 @@ function globalview(){
 
     dataPeriod.forEach(element => {
 
-        console.log(element);
+        totalProduction += (element.production.energieHC ?? 0) + (element.production.energieHP ?? 0);
 
-        totalProduction += (element['production']['energieHC'] + element['production']['energieHP']);
-        totalConsommation += (element['consommation']['energieConsommeeHC'] + element['consommation']['energieConsommeeHP']);
-        totalImporte += (element['reseau']['energieImporteeHC'] + element['reseau']['energieImporteeHP'])
+        totalConsommation += (element.consommation.energieConsommeeHC ?? 0)+ (element.consommation.energieConsommeeHP ?? 0);
+
+        totalImporte += (element.reseau.energieImporteeHC ?? 0) + (element.reseau.energieImporteeHP ?? 0);
         
     });
 
