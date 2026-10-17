@@ -101,11 +101,11 @@ function afficherTarifs(puissance) {
 function afficherDates() {
 
     dateMin = tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null);
-    dateMin = dateMin.toLocaleDateString('fr-FR');
 
     dateMax = tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null);
 
-    dateMax = dateMax.toLocaleDateString('fr-FR');
+    console.log(dateMin);
+    console.log(dateMax);
 
     dateMAJ.textContent = dateMax;
 
