@@ -678,13 +678,13 @@ class VictronCsvProcessor
         );
 
         // Consommation de la maison
-        $jour->setEnergieImporteeHC(
+        $jour->setEnergieConsommeeHC(
             $this->donneesJour['consommation']['energie_consommee_hc'] !== null
                 ? (string) $this->donneesJour['consommation']['energie_consommee_hc']
                 : null
         );
 
-        $jour->setEnergieImporteeHP(
+        $jour->setEnergieConsommeeHP(
             $this->donneesJour['consommation']['energie_consommee_hp'] !== null
                 ? (string) $this->donneesJour['consommation']['energie_consommee_hp']
                 : null
