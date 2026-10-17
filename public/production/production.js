@@ -75,8 +75,8 @@ document.getElementById('apply-period').addEventListener("click", async () => {
     await getDataPeriod(dateDebut, dateFin);
     await getTarifsPeriod(dateDebut, dateFin);
 
-    dateDebut = dateDebut.toLocaleDateString('fr-FR');
-    dateFin = dateFin.toLocaleDateString('fr-FR');
+    dateDebut = new Date(dateDebut).toLocaleDateString('fr-FR');
+    dateFin = new Date(dateFin).toLocaleDateString('fr-FR');
 
     document.getElementById('chart-period').textContent = `${dateDebut} → ${dateFin}`;
     document.getElementById('selected-period').textContent = `${dateDebut} → ${dateFin}`;
