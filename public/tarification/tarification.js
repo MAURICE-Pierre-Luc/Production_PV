@@ -100,13 +100,13 @@ function afficherTarifs(puissance) {
 
 function afficherDates() {
 
-    dateMin = tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null);
+    dateMin = tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null).toLocaleDateString('fr-FR');
 
-    dateMax = tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null);
+    dateMax = tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null).toLocaleDateString('fr-FR');
 
-    dateMAJ.textContent = dateMax.toLocaleDateString('fr-FR');
+    dateMAJ.textContent = dateMax;
 
-    spanPeriode.textContent = `${dateMin.toLocaleDateString('fr-FR')} → ${dateMax.toLocaleDateString('fr-FR')}`;
+    spanPeriode.textContent = `${dateMin} → ${dateMax}`;
 
 }
 
