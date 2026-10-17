@@ -68,8 +68,11 @@ document.getElementById('apply-period').addEventListener("click", async () => {
     var dateDebut = document.getElementById('start-date').value;
     var dateFin = document.getElementById('end-date').value;
 
-    getDataPeriod(dateDebut, dateFin);
-    getTarifsPeriod(dateDebut, dateFin);
+    await getDataPeriod(dateDebut, dateFin);
+    await getTarifsPeriod(dateDebut, dateFin);
+
+    globalview()
+
 })
 
 
