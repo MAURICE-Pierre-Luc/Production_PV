@@ -70,10 +70,10 @@ document.getElementById('apply-period').addEventListener("click", async () => {
     var dateDebut = document.getElementById('start-date').value;
     var dateFin = document.getElementById('end-date').value;
 
-    await getDataPeriod(dateDebut, dateFin);
-    await getTarifsPeriod(dateDebut, dateFin);
+    getDataPeriod(dateDebut, dateFin);
+    getTarifsPeriod(dateDebut, dateFin);
 
-    globalview()
+    globalview();
 
 })
 
