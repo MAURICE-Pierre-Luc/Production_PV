@@ -86,6 +86,10 @@ function globalview() {
     let totalConsommationElement = document.getElementById('consumption');
     let totalAutoConsommationElement = document.getElementById('self-kwh');
     let totalImportElement = document.getElementById('imported');
+    let averageDailyProductionElement =  document.getElementById('average-production');
+    let maximumDayProductionElement =  document.getElementById('max-production');
+    let bestProductionDayElement = document.getElementById('best-day');
+    let autoConsommationElement = document.getElementById('self-consumption');
 
     var totalProduction = 0;
     var totalConsommation = 0;
@@ -96,6 +100,9 @@ function globalview() {
     let dailyConsommation = 0;
     let dailyImport = 0;
     let dailyAutoConsommation = 0;
+
+    let maxProduction = 0;
+    let bestProductionDay = new Date();
 
     dataPeriod.forEach(element => {
 
@@ -114,8 +121,10 @@ function globalview() {
         chartGlobalView.data.datasets[2].data.push(dailyImport);
         chartGlobalView.data.datasets[3].data.push(dailyAutoConsommation);
 
-
-
+        if(dailyProduction > maxProduction){
+            maxProduction = dailyProduction;
+            bestProductionDay = new Date(element.dateJour);
+        }
     });
 
     chartGlobalView.update();
@@ -126,23 +135,33 @@ function globalview() {
     totalAutoConsommation = Math.trunc((totalConsommation - totalImport) * 100) / 100;
 
 
-
-
-
-
-
-
-
-
-
-
     totalProductionElement.textContent = totalProduction;
     totalConsommationElement.textContent = totalConsommation;
     totalAutoConsommationElement.textContent = totalAutoConsommation;
     totalImportElement.textContent = totalImport;
 
+    averageDailyProductionElement.textContent = totalProduction/dataPeriod.length();
+    maximumDayProductionElement.textContent = maxProduction;
+    bestProductionDayElement.textContent = formatDate(bestProductionDay);
+    autoConsommationElement.textContent = Math.trunc((totalProduction/totalConsommation) * 100 * 100) / 100;
+
 }
 
+
+function formatDate(date) {
+
+    if (!date) {
+        return "--/--/----";
+    }
+
+    const parts = date.split("-");
+
+    if (parts.length !== 3) {
+        return "--/--/----";
+    }
+
+    return `${parts[0]}/${parts[1]}/${parts[2]}`;
+}
 
 const chartGlobalView = new Chart(document.getElementById('chart-overview'), {
     type: 'line',
