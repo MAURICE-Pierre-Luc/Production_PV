@@ -10,9 +10,9 @@ let tarifPeriod = [];
 
 
 
-async function getDataPeriod(dateDebut, dateFin){
+async function getDataPeriod(dateDebut, dateFin) {
 
-    try{
+    try {
         const response = await fetch(`${API_LINK_JOUR}/period?dateDebut=${dateDebut}&dateFin=${dateFin}`)
         const resultat = await response.json();
 
@@ -23,23 +23,23 @@ async function getDataPeriod(dateDebut, dateFin){
                 || `Erreur HTTP ${response.status}`
             );
         }
-        if(resultat.length === 0){
+        if (resultat.length === 0) {
             console.log("La liste des jours est vide");
-        }else{
-            
+        } else {
+
             dataPeriod = resultat;
             console.log(dataPeriod);
 
         }
-    } catch (error)  {
+    } catch (error) {
         console.error("Erreur lors de la récupération des imports :", error);
     }
 
 }
 
-async function getTarifsPeriod(dateDebut, dateFin){
+async function getTarifsPeriod(dateDebut, dateFin) {
 
-    try{
+    try {
         const response = await fetch(`${API_LINK_TARIFS}/period?dateDebut=${dateDebut}&dateFin=${dateFin}`)
         const resultat = await response.json();
 
@@ -50,15 +50,15 @@ async function getTarifsPeriod(dateDebut, dateFin){
                 || `Erreur HTTP ${response.status}`
             );
         }
-        if(resultat.length === 0){
+        if (resultat.length === 0) {
             console.log("La liste de tarifs est vide");
-        }else{
+        } else {
 
             tarifPeriod = resultat;
             console.log(tarifPeriod);
-            
+
         }
-    } catch (error)  {
+    } catch (error) {
         console.error("Erreur lors de la récupération des imports :", error);
     }
 
@@ -66,7 +66,7 @@ async function getTarifsPeriod(dateDebut, dateFin){
 
 
 document.getElementById('apply-period').addEventListener("click", async () => {
-    
+
     var dateDebut = document.getElementById('start-date').value;
     var dateFin = document.getElementById('end-date').value;
 
@@ -78,42 +78,85 @@ document.getElementById('apply-period').addEventListener("click", async () => {
 })
 
 
-function globalview(){
+function globalview() {
     let totalProductionElement = document.getElementById('production');
     let totalConsommationElement = document.getElementById('consumption');
-    let totalAutoConsomationElement = document.getElementById('self-kwh');
-    let totalImporteElement = document.getElementById('imported');
+    let totalAutoConsommationElement = document.getElementById('self-kwh');
+    let totalImportElement = document.getElementById('imported');
 
     var totalProduction = 0;
     var totalConsommation = 0;
-    var totalImporte = 0;
+    var totalImport = 0;
     var totalAutoConsomation = 0;
 
-    console.log(dataPeriod[0]['production']['energieHC']);
-    console.log(dataPeriod[0]['consommation']['energieConsommeeHC']);
-    console.log(dataPeriod[0]['reseau']['energieImporteeHC']);
+    let dailyProduction = 0;
+    let dailyConsommation = 0;
+    let dailyImport = 0;
+    let dailyAutoConsommation = 0;
 
     dataPeriod.forEach(element => {
 
-        totalProduction += Number(element.production.energieHC ?? 0) + Number(element.production.energieHP ?? 0);
+        dailyProduction = Number(element.production.energieHC ?? 0) + Number(element.production.energieHP ?? 0);
+        dailyConsommation = Number(element.consommation.energieConsommeeHC ?? 0) + Number(element.consommation.energieConsommeeHP ?? 0);
+        dailyImport = Number(element.reseau.energieImporteeHC ?? 0) + Number(element.reseau.energieImporteeHP ?? 0);
+        dailyAutoConsommation = Math.trunc((dailyConsommation - dailyImport) * 100) / 100;
 
-        totalConsommation += Number(element.consommation.energieConsommeeHC ?? 0)+ Number(element.consommation.energieConsommeeHP ?? 0);
+        totalProduction += dailyProduction;
+        totalConsommation += dailyConsommation;
+        totalImport += dailyImport;
 
-        totalImporte += Number(element.reseau.energieImporteeHC ?? 0) + Number(element.reseau.energieImporteeHP ?? 0);
-        
+
+
+
+
     });
 
 
     totalProduction = Math.trunc(totalProduction * 100) / 100;
     totalConsommation = Math.trunc(totalConsommation * 100) / 100;
     totalImporte = Math.trunc(totalImporte * 100) / 100;
-    totalAutoConsomation = Math.trunc((totalConsommation - totalImporte) * 100)/100;
+    totalAutoConsommation = Math.trunc((totalConsommation - totalImport) * 100) / 100;
+
+
+
+
+
+
+
+
+
+
+
 
     totalProductionElement.textContent = totalProduction;
     totalConsommationElement.textContent = totalConsommation;
-    totalAutoConsomationElement.textContent = totalAutoConsomation;
-    totalImporteElement.textContent = totalImporte;
-
+    totalAutoConsommationElement.textContent = totalAutoConsomation;
+    totalImportElement.textContent = totalImporte;
 
 }
 
+
+const chartGlobalView = new Chart(document.getElementById('chart-overview'), {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [
+            { label: 'Production', data: col('prod'), borderColor: '#e0a100', backgroundColor: '#e0a100', borderWidth: 2, pointRadius: 0, tension: 0 },
+            { label: 'Consommation', data: col('conso'), borderColor: '#2b6cb0', backgroundColor: '#2b6cb0', borderWidth: 2, pointRadius: 0, tension: 0 },
+            { label: 'Importée', data: col('imp'), borderColor: '#b3402f', backgroundColor: '#b3402f', borderWidth: 2, pointRadius: 0, tension: 0 },
+            { label: 'Énergie autoconsommée', data: col('auto'), borderColor: '#2a7d46', backgroundColor: '#2a7d46', borderWidth: 2, pointRadius: 0 }
+        ]
+    },
+    options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { callbacks: { label: (c) => `${c.dataset.label} : ${c.parsed.y.toFixed(2)} kWh` } }
+        },
+        scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'kWh' } },
+            x: { ticks: { maxTicksLimit: 6 } }
+        }
+    }
+});
