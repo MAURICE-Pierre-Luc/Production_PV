@@ -141,10 +141,10 @@ const chartGlobalView = new Chart(document.getElementById('chart-overview'), {
     data: {
         labels: [],
         datasets: [
-            { label: 'Production', data: col('prod'), borderColor: '#e0a100', backgroundColor: '#e0a100', borderWidth: 2, pointRadius: 0, tension: 0 },
-            { label: 'Consommation', data: col('conso'), borderColor: '#2b6cb0', backgroundColor: '#2b6cb0', borderWidth: 2, pointRadius: 0, tension: 0 },
-            { label: 'Importée', data: col('imp'), borderColor: '#b3402f', backgroundColor: '#b3402f', borderWidth: 2, pointRadius: 0, tension: 0 },
-            { label: 'Énergie autoconsommée', data: col('auto'), borderColor: '#2a7d46', backgroundColor: '#2a7d46', borderWidth: 2, pointRadius: 0 }
+            { label: 'Production', data: [], borderColor: '#e0a100', backgroundColor: '#e0a100', borderWidth: 2, pointRadius: 0, tension: 0 },
+            { label: 'Consommation', data: [], borderColor: '#2b6cb0', backgroundColor: '#2b6cb0', borderWidth: 2, pointRadius: 0, tension: 0 },
+            { label: 'Importée', data: [], borderColor: '#b3402f', backgroundColor: '#b3402f', borderWidth: 2, pointRadius: 0, tension: 0 },
+            { label: 'Énergie autoconsommée', data: [], borderColor: '#2a7d46', backgroundColor: '#2a7d46', borderWidth: 2, pointRadius: 0 }
         ]
     },
     options: {
