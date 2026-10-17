@@ -40,6 +40,8 @@ class VictronCsvProcessor
 
     private ?float $previousGridPower = null;
 
+    private ?float $previousConsoPower = null;
+
     private ?float $previousForwardEnergy = null;
 
     private ?\DateTime $previousTimestamp = null;
@@ -55,12 +57,6 @@ class VictronCsvProcessor
     private array $plagesHoraires = [];
 
     private array $colonnesVoulues = [ 
-        // Horodatage
-        /*[
-            'source' => 'timestamp',
-            'mesure' => 'Europe/Paris',
-            'cible' => 'aucune',
-        ],*/
         // PRODUCTION_JOUR
         [
             'source' => 'Solar Charger [279]',
@@ -88,6 +84,11 @@ class VictronCsvProcessor
             'source' => 'System overview [0]',
             'mesure' => 'Grid L1',
             'cible' => 'energie_importe',
+        ],
+        [
+            'source' => 'System overview [0]',
+            'mesure' => 'AC Consumption L1',
+            'cible' => 'energie_consomme',
         ],
 
         // BATTERIE_JOUR
@@ -177,6 +178,10 @@ class VictronCsvProcessor
                 'nb_alarmes' => 0,
             ],
             'consommation' => [
+                'energie_consommee_hc' => 0,
+                'energie_consommee_hp' => 0,
+            ],
+            'import' => [
                 'energie_importe_hc' => 0,
                 'energie_importe_hp' => 0,
             ],
@@ -202,6 +207,7 @@ class VictronCsvProcessor
         $this->previousUserYield = null;
         $this->previousL1Energy = null;
         $this->previousGridPower = null;
+        $this->previousConsoPower = null;
         $this->previousForwardEnergy = null;
         $this->previousTimestamp = null;
         $this->dateDebut = null;
@@ -374,6 +380,7 @@ class VictronCsvProcessor
                 $this->previousL1Energy = null;
                 $this->previousForwardEnergy = null;
                 $this->previousGridPower = null;
+                $this->previousConsoPower = null;
                 $this->previousTimestamp = null;
             }
 
@@ -394,7 +401,10 @@ class VictronCsvProcessor
                     $this->traiterPuissanceProduction($colonneInfo['mesure'], (float) $valeur, $heure);
                 }
                 elseif ($colonneInfo['cible'] === 'energie_importe') {
-                    $this->traiterConsommation( (float) $valeur, $timestamp);
+                    $this->traiterEnergieImporte( (float) $valeur, $timestamp);
+                }
+                elseif ($colonneInfo['cible'] === 'energie_consomme') {
+                    $this->traiterConsommationTotale( (float) $valeur, $timestamp);
                 }
                 elseif ($colonneInfo['cible'] === 'batterie') {
                     $this->traiterBatterie( $colonneInfo['mesure'], $valeur);
@@ -476,7 +486,7 @@ class VictronCsvProcessor
         }
     }
 
-    private function traiterConsommation(float $puissance, \DateTime $timestamp): void{
+    private function traiterEnergieImporte(float $puissance, \DateTime $timestamp): void{
 
         if ($this->previousGridPower !== null && $this->previousTimestamp !== null) {
 
@@ -494,17 +504,47 @@ class VictronCsvProcessor
 
                 if ($this->currentHourtype === TypeHoraire::HC) {
 
-                    $this->donneesJour['consommation']['energie_importe_hc'] += $energie;
+                    $this->donneesJour['import']['energie_importe_hc'] += $energie;
 
                 } elseif ($this->currentHourtype === TypeHoraire::HP) {
 
-                    $this->donneesJour['consommation']['energie_importe_hp'] += $energie;
+                    $this->donneesJour['import']['energie_importe_hp'] += $energie;
                 }
             }
         }
 
         $this->previousGridPower = $puissance;
         $this->previousTimestamp = $timestamp;
+    }
+
+    private function traiterConsommationTotale(float $puissance, \DateTime $timestamp): void{
+
+        if ($this->previousConsoPower !== null && $this->previousTimestamp !== null) {
+
+            $dureeSecondes = $timestamp->getTimestamp() - $this->previousTimestamp->getTimestamp();
+
+            if ($dureeSecondes > 0) {
+
+                $puissancePrecedente = max(0, $this->previousConsoPower);
+                $puissanceActuelle = max(0, $puissance);
+
+                $puissanceMoyenne = ( $puissancePrecedente + $puissanceActuelle ) / 2;
+
+                // Puissance en W -> énergie en kWh
+                $energie = ($puissanceMoyenne * $dureeSecondes) / 3600000;
+
+                if ($this->currentHourtype === TypeHoraire::HC) {
+
+                    $this->donneesJour['consommation']['energie_consommee_hc'] += $energie;
+
+                } elseif ($this->currentHourtype === TypeHoraire::HP) {
+
+                    $this->donneesJour['consommation']['energie_consommee_hp'] += $energie;
+                }
+            }
+        }
+
+        $this->previousConsoPower = $puissance;
     }
 
     private function traiterBatterie(string $mesure, mixed $valeur): void{
@@ -627,13 +667,13 @@ class VictronCsvProcessor
 
         // Consommation du réseau
         $jour->setEnergieImporteeHC(
-            $this->donneesJour['consommation']['energie_importe_hc'] !== null
+            $this->donneesJour['import']['energie_importe_hc'] !== null
                 ? (string) $this->donneesJour['consommation']['energie_importe_hc']
                 : null
         );
 
         $jour->setEnergieImporteeHP(
-            $this->donneesJour['consommation']['energie_importe_hp'] !== null
+            $this->donneesJour['import']['energie_importe_hp'] !== null
                 ? (string) $this->donneesJour['consommation']['energie_importe_hp']
                 : null
         );
