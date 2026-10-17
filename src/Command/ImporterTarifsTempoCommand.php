@@ -12,7 +12,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Scheduler\Attribute\AsCronTask;
 
+#[AsCronTask('0 6 1 * *')]
 #[AsCommand(
     name: 'app:importer-tarifs-tempo',
     description: 'Récupère et importe les tarifs historiques Tempo depuis la CRE'
