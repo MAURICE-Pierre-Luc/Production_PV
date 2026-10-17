@@ -24,7 +24,7 @@ async function getDataPeriod(dateDebut, dateFin){
             );
         }
         if(resultat.length === 0){
-            console.log("La liste de tarifs est vide");
+            console.log("La liste des jours est vide");
         }else{
             
             console.log(resultat);
@@ -73,4 +73,24 @@ document.getElementById('apply-period').addEventListener("click", async () => {
     getDataPeriod(dateDebut, dateFin);
     getTarifsPeriod(dateDebut, dateFin);
 })
+
+
+function globalview(){
+    let totalProductionElement = document.getElementById('production');
+    let totalConsommationElement = document.getElementById('consumption');
+    let totalAutoConsomationElement = document.getElementById('self-kwh');
+    let totalImporteElement = document.getElementById('imported');
+
+    var totalProduction = 0;
+
+    var totalConsommation = 0;
+
+    dataPeriod.forEach(element => {
+        
+        totalProduction =+ (element['production']['energieHC'] + element['production']['energieHP']);
+
+        totalConsommation =+ (element['production']['energieHC'] + element['production']['energieHP']);
+
+    });
+}
 
