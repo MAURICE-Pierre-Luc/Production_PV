@@ -46,7 +46,7 @@ class Jour
     // Consommation de la maison
 
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
-    private ?string $energieConsomeeHC = null;
+    private ?string $energieConsommeeHC = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 3, nullable: true)]
     private ?string $energieConsommeeHP = null;
