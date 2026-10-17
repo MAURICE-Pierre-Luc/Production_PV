@@ -123,7 +123,7 @@ function globalview() {
 
         if(dailyProduction > maxProduction){
             maxProduction = dailyProduction;
-            bestProductionDay = new Date(element.dateJour);
+            bestProductionDay = new Date(element.dateJour).toLocaleDateString('fr-FR');
         }
     });
 
@@ -140,7 +140,7 @@ function globalview() {
     totalAutoConsommationElement.textContent = totalAutoConsommation;
     totalImportElement.textContent = totalImport;
 
-    averageDailyProductionElement.textContent = totalProduction/dataPeriod.length;
+    averageDailyProductionElement.textContent = Math.trunc((totalProduction/dataPeriod.length) * 100) / 100;
     maximumDayProductionElement.textContent = maxProduction;
     bestProductionDayElement.textContent = bestProductionDay;
     autoConsommationElement.textContent = Math.trunc((totalProduction/totalConsommation) * 100 * 100) / 100;
