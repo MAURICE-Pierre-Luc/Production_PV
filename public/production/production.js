@@ -142,26 +142,11 @@ function globalview() {
 
     averageDailyProductionElement.textContent = totalProduction/dataPeriod.length;
     maximumDayProductionElement.textContent = maxProduction;
-    bestProductionDayElement.textContent = formatDate(bestProductionDay);
+    bestProductionDayElement.textContent = bestProductionDay;
     autoConsommationElement.textContent = Math.trunc((totalProduction/totalConsommation) * 100 * 100) / 100;
 
 }
 
-
-function formatDate(date) {
-
-    if (!date) {
-        return "--/--/----";
-    }
-
-    const parts = date.split("-");
-
-    if (parts.length !== 3) {
-        return "--/--/----";
-    }
-
-    return `${parts[0]}/${parts[1]}/${parts[2]}`;
-}
 
 const chartGlobalView = new Chart(document.getElementById('chart-overview'), {
     type: 'line',
