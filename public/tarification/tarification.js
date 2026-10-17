@@ -235,49 +235,16 @@ const chart = new Chart(canvas, {
 
         datasets: [
             // Bleu
-            {
-                label: 'Bleu HC',
-                data: [],
-                borderColor: '#4385d8',
-                tension: 0.2
-            },
-            {
-                label: 'Bleu HP',
-                data: [],
-                borderColor: '#4385d8',
-                borderDash: [5, 5],
-                tension: 0.2
-            },
+            { label: 'Bleu HC', data: [], borderColor: '#4385d8', tension: 0.2 },
+            { label: 'Bleu HP', data: [], borderColor: '#4385d8', borderDash: [5, 5], tension: 0.2 },
 
             // Blanc
-            {
-                label: 'Blanc HC',
-                data: [],
-                borderColor: '#999999',
-                tension: 0.2
-            },
-            {
-                label: 'Blanc HP',
-                data: [],
-                borderColor: '#999999',
-                borderDash: [5, 5],
-                tension: 0.2
-            },
+            { label: 'Blanc HC', data: [], borderColor: '#999999', tension: 0.2 },
+            { label: 'Blanc HP', data: [], borderColor: '#999999', borderDash: [5, 5], tension: 0.2 },
 
             // Rouge
-            {
-                label: 'Rouge HC',
-                data: [],
-                borderColor: '#d9534f',
-                tension: 0.2
-            },
-            {
-                label: 'Rouge HP',
-                data: [],
-                borderColor: '#d9534f',
-                borderDash: [5, 5],
-                tension: 0.2
-            }
+            { label: 'Rouge HC', data: [], borderColor: '#d9534f', tension: 0.2 },
+            { label: 'Rouge HP', data: [], borderColor: '#d9534f', borderDash: [5, 5], tension: 0.2 }
         ]
     },
 
