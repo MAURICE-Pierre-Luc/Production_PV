@@ -130,7 +130,7 @@ function globalview() {
 
     totalProductionElement.textContent = totalProduction;
     totalConsommationElement.textContent = totalConsommation;
-    totalAutoConsommationElement.textContent = totalAutoConsomation;
+    totalAutoConsommationElement.textContent = totalAutoConsommation;
     totalImportElement.textContent = totalImport;
 
 }
