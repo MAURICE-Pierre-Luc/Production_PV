@@ -118,7 +118,7 @@ function globalview() {
 
     });
 
-    chart.update();
+    chartGlobalView.update();
 
     totalProduction = Math.trunc(totalProduction * 100) / 100;
     totalConsommation = Math.trunc(totalConsommation * 100) / 100;
