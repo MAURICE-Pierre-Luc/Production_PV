@@ -28,6 +28,7 @@ async function getDataPeriod(dateDebut, dateFin){
         }else{
             
             dataPeriod = resultat;
+            console.log(dataPeriod);
 
         }
     } catch (error)  {
@@ -54,6 +55,7 @@ async function getTarifsPeriod(dateDebut, dateFin){
         }else{
 
             tarifPeriod = resultat;
+            console.log(tarifPeriod);
             
         }
     } catch (error)  {
