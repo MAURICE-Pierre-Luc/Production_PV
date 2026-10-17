@@ -217,7 +217,6 @@ class VictronCsvProcessor
     }
 
     private function getFilePath(int $importId): string{
-        
         return $this->projectDir . '/var/imports/' . $importId . '.csv';
     }
 
@@ -675,6 +674,19 @@ class VictronCsvProcessor
         $jour->setEnergieImporteeHP(
             $this->donneesJour['import']['energie_importe_hp'] !== null
                 ? (string) $this->donneesJour['consommation']['energie_importe_hp']
+                : null
+        );
+
+        // Consommation de la maison
+        $jour->setEnergieImporteeHC(
+            $this->donneesJour['consommation']['energie_consommee_hc'] !== null
+                ? (string) $this->donneesJour['consommation']['energie_consommee_hc']
+                : null
+        );
+
+        $jour->setEnergieImporteeHP(
+            $this->donneesJour['consommation']['energie_consommee_hp'] !== null
+                ? (string) $this->donneesJour['consommation']['energie_consommee_hp']
                 : null
         );
 
