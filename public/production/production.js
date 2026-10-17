@@ -97,9 +97,9 @@ function globalview(){
 
         console.log(element);
 
-        totalProduction =+ (element['production']['energieHC'] + element['production']['energieHP']);
-        totalConsommation =+ (element['consommation']['energieConsommeeHC'] + element['consommation']['energieConsommeeHP']);
-        totalImporte =+ (element['reseau']['energieImporteeHC'] + element['reseau']['energieImporteeHP'])
+        totalProduction += (element['production']['energieHC'] + element['production']['energieHP']);
+        totalConsommation += (element['consommation']['energieConsommeeHC'] + element['consommation']['energieConsommeeHP']);
+        totalImporte += (element['reseau']['energieImporteeHC'] + element['reseau']['energieImporteeHP'])
         
     });
 
