@@ -2,9 +2,9 @@
  * Vérification de la connexion
  */
 
-if (sessionStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "../login/login.html";
-}
+// if (sessionStorage.getItem("loggedIn") !== "true") {
+//     window.location.href = "../login/login.html";
+// }
 
 
 /*
@@ -31,7 +31,7 @@ const importButton = document.getElementById("import-button");
 const importStatus = document.getElementById("import-status");
 
 const historyTableContent = document.getElementById("history-table-content");
-
+const refreshButton = document.getElementById("refresh-imports");
 
 /*
  * On récupère les imports déja faits
@@ -201,6 +201,7 @@ importButton.addEventListener("click", async function () {
 
     } finally {
         importButton.disabled = false;
+        listImports()
     }
 });
 
@@ -224,22 +225,28 @@ async function listImports(){
             );
         }
 
-        console.log(resultat);
+        if(resultat.length === 0){
+            console.log("La liste d'imports est vide");
+        }else{
 
 
-        resultat.forEach(element => {
-            historyTableContent.appendChild = `
-                    <tr>
-                        <td> ${element[0]} </td>
-                        <td> ${element[1]}</td>
-                        <td> ${element[2]}</td>
-                        <td> ${element[3]}</td>
-                    </tr>`
-        });
-
+            historyTableContent.innerHTML = resultat.map(element => `
+                <tr>
+                    <td>${element.nomFichier ?? "---"}</td>
+                    <td>${element.dateDebutDonnees ?? "---"}</td>
+                    <td>${element.dateFinDonnees ?? "---"}</td>
+                    <td>${element.statut ?? "---"}</td>
+                </tr>
+            `).join("");
+        }
 
     } catch (error)  {
         console.error("Erreur lors de la récupération des imports :", error);
     }
-
 }
+
+/*
+* Raffraichit la liste des imports
+*/ 
+
+refreshButton.addEventListener("click", listImports);

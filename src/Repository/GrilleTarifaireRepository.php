@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\GrilleTarifaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -52,4 +53,18 @@ class GrilleTarifaireRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function findByPeriode(\DateTimeInterface $debut, \DateTimeInterface $fin): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.dateDebut <= :fin')
+            ->andWhere('g.dateFin IS NULL OR g.dateFin >= :debut')
+            ->setParameter('debut', $debut, Types::DATE_MUTABLE)
+            ->setParameter('fin', $fin, Types::DATE_MUTABLE)
+            ->orderBy('g.dateDebut', 'ASC')
+            ->addOrderBy('g.deb', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

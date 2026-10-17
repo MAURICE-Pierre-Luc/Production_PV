@@ -1,147 +1,96 @@
-/*
- * Données temporaires.
- *
- * Elles seront remplacées par les données
- * récupérées depuis l'API Symfony.
- */
-
-const periodData = {
-    production: "---",
-    consumption: "---",
-    exported: "---",
-    imported: "---",
-
-    averageProduction: "---",
-    bestDay: "--/--/----",
-    maxProduction: "---",
-    selfConsumption: "---"
-};
 
 
-/*
- * Éléments HTML
- */
+const API_LINK_JOUR = "/api/jour";
 
-const startDateInput = document.getElementById("start-date");
-const endDateInput = document.getElementById("end-date");
-const applyButton = document.getElementById("apply-period");
+const API_LINK_TARIFS = "/api/grille-tarifaire";
+
+let dataPeriod = [];
+
+let tarifPeriod = [];
 
 
-/*
- * Formatage d'une date pour l'affichage.
- */
 
-function formatDate(date) {
+async function getDataPeriod(dateDebut, dateFin){
 
-    if (!date) {
-        return "--/--/----";
+    try{
+        const response = await fetch(`${API_LINK_JOUR}/period?dateDebut=${dateDebut}&dateFin=${dateFin}`)
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+        if(resultat.length === 0){
+            console.log("La liste des jours est vide");
+        }else{
+            
+            console.log(resultat);
+            dataPeriod = resultat;
+
+        }
+    } catch (error)  {
+        console.error("Erreur lors de la récupération des imports :", error);
     }
 
-    const parts = date.split("-");
+}
 
-    if (parts.length !== 3) {
-        return "--/--/----";
+async function getTarifsPeriod(dateDebut, dateFin){
+
+    try{
+        const response = await fetch(`${API_LINK_TARIFS}/period?dateDebut=${dateDebut}&dateFin=${dateFin}`)
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+        if(resultat.length === 0){
+            console.log("La liste de tarifs est vide");
+        }else{
+
+            console.log(resultat);
+            tarifPeriod = resultat;
+            
+        }
+    } catch (error)  {
+        console.error("Erreur lors de la récupération des imports :", error);
     }
 
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 
-/*
- * Affichage des données.
- */
+document.getElementById('apply-period').addEventListener("click", async () => {
+    
+    var dateDebut = document.getElementById('start-date').value;
+    var dateFin = document.getElementById('end-date').value;
 
-function displayData() {
-
-    document.getElementById("production").textContent =
-        periodData.production;
-
-    document.getElementById("consumption").textContent =
-        periodData.consumption;
-
-    document.getElementById("exported").textContent =
-        periodData.exported;
-
-    document.getElementById("imported").textContent =
-        periodData.imported;
+    getDataPeriod(dateDebut, dateFin);
+    getTarifsPeriod(dateDebut, dateFin);
+})
 
 
-    document.getElementById("average-production").textContent =
-        periodData.averageProduction;
+function globalview(){
+    let totalProductionElement = document.getElementById('production');
+    let totalConsommationElement = document.getElementById('consumption');
+    let totalAutoConsomationElement = document.getElementById('self-kwh');
+    let totalImporteElement = document.getElementById('imported');
 
-    document.getElementById("best-day").textContent =
-        periodData.bestDay;
+    var totalProduction = 0;
 
-    document.getElementById("max-production").textContent =
-        periodData.maxProduction;
+    var totalConsommation = 0;
 
-    document.getElementById("self-consumption").textContent =
-        periodData.selfConsumption;
+    dataPeriod.forEach(element => {
+        
+        totalProduction =+ (element['production']['energieHC'] + element['production']['energieHP']);
+
+        totalConsommation =+ (element['production']['energieHC'] + element['production']['energieHP']);
+
+    });
 }
 
-
-/*
- * Mise à jour de la période affichée.
- */
-
-function updatePeriod() {
-
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value;
-
-    if (!startDate || !endDate) {
-        return;
-    }
-
-    if (startDate > endDate) {
-        alert("La date de début doit être antérieure à la date de fin.");
-        return;
-    }
-
-    const periodText =
-        `${formatDate(startDate)} → ${formatDate(endDate)}`;
-
-    document.getElementById("selected-period").textContent =
-        periodText;
-
-    document.getElementById("chart-period").textContent =
-        periodText;
-
-
-    /*
-     * Plus tard, c'est ici que l'on pourra faire
-     * la requête vers l'API Symfony.
-     *
-     * Exemple :
-     *
-     * fetch(`/api/production?debut=${startDate}&fin=${endDate}`)
-     *
-     * puis mettre à jour periodData avec la réponse.
-     */
-
-    displayData();
-}
-
-
-/*
- * Bouton "Afficher"
- */
-
-applyButton.addEventListener("click", updatePeriod);
-
-
-/*
- * Dates par défaut.
- *
- * Pour le prototype, on affiche le mois en cours.
- */
-
-const today = new Date();
-
-const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, "0");
-
-startDateInput.value = `${year}-${month}-01`;
-endDateInput.value = today.toISOString().split("T")[0];
-
-updatePeriod();

@@ -1,39 +1,167 @@
 /*
- * Données temporaires.
- *
- * Elles seront remplacées par les données
- * récupérées depuis l'API Symfony.
+ * Configuration de l'API
  */
 
-const tariffData = {
+const API_URL = "/api/grille-tarifaire";
 
-    blue: {
-        hc: "---",
-        hp: "---"
-    },
 
-    white: {
-        hc: "---",
-        hp: "---"
-    },
+const canvas = document.getElementById('tariff-chart');
+const listePuissances =  document.getElementById('subscribed-power');
+const dateMAJ = document.getElementById('last-update');
+const spanPeriode = document.getElementById('chart-period')
 
-    red: {
-        hc: "---",
-        hp: "---"
-    },
+let puissanceDefaut = 6;   // variable modifiable (kVA)
+let tousLesTarifs = [];     // on garde les données pour ne pas refaire l'appel API
 
-    subscribedPower: "---"
+// Associe "couleur + type" à l'index du dataset du graphe
+const INDEX_DATASETS = {
+    'BLEU_HC': 0,
+    'BLEU_HP': 1,
+    'BLANC_HC': 2,
+    'BLANC_HP': 3,
+    'ROUGE_HC': 4,
+    'ROUGE_HP': 5
 };
 
+const COULEURS_ORIGINALES = {};
 
 /*
- * Éléments HTML
+ * Recuperation des tarifs
  */
 
-const startDateInput = document.getElementById("start-date");
-const endDateInput = document.getElementById("end-date");
-const applyButton = document.getElementById("apply-period");
+getTarifs();
 
+async function getTarifs(){
+    try{
+        const response = await fetch(`${API_URL}/tarifs`)
+        const resultat = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                resultat.message
+                || resultat.error
+                || `Erreur HTTP ${response.status}`
+            );
+        }
+        if(resultat.length === 0){
+            console.log("La liste de tarifs est vide");
+        }else{
+
+            tousLesTarifs = resultat;
+
+            afficherTarifs(puissanceDefaut);
+            afficherDates();
+            ajouterPuissances();
+            afficherTarifsRecents(puissanceDefaut);
+            
+        }
+    } catch (error)  {
+        console.error("Erreur lors de la récupération des imports :", error);
+    }
+}
+
+
+function afficherTarifs(puissance) {
+    // 1. Filtrer sur la puissance choisie
+    const tarifs = tousLesTarifs.filter(t => t.puissance === puissance);
+
+    // 2. Regrouper par dateDebut : { "2025-01-01": { bleu_HC: 0.1296, ... }, ... }
+    const parDate = {};
+
+    tarifs.forEach(t => {
+        const cle = `${t.couleur.toUpperCase()}_${t.type.toUpperCase()}`;
+
+        if (!(cle in INDEX_DATASETS)){
+            
+            console.log(`Combinaison inconnue ${cle}`)
+            return; // combinaison inconnue : on ignore
+        }
+        
+        if (!parDate[t.dateDebut]) {
+            parDate[t.dateDebut] = {};
+        }
+        // Plusieurs plages possibles pour une même couleur/type : le tarif est le même, on écrase
+        parDate[t.dateDebut][cle] = parseFloat(t.tarif);
+    });
+
+    // 3. Trier les dates (le format Y-m-d se trie correctement en texte)
+    const dates = Object.keys(parDate).sort();
+
+    // 4. Remplir le graphe
+    chart.data.labels = dates;
+
+    chart.data.datasets.forEach((dataset, index) => {
+        const cle = Object.keys(INDEX_DATASETS).find(k => INDEX_DATASETS[k] === index);
+        dataset.data = dates.map(date => parDate[date][cle] ?? null);
+    });
+
+    chart.update();
+}
+
+function afficherDates(){
+
+    dateMin = tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null);
+
+    dateMax = tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null);
+
+    dateMAJ.textContent = formatDate(dateMax);
+
+    spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
+
+}
+
+function ajouterPuissances(){
+
+    puissances = [...new Set(tousLesTarifs.map(t => t.puissance))].filter(p => p !== null).sort((a, b) => a - b);
+
+    puissances.forEach(element => {
+        const option = document.createElement("option");
+
+        option.value = element;
+        option.textContent = `${element} kVA`;
+
+        listePuissances.appendChild(option);
+    });
+
+}
+
+function afficherTarifsRecents(puissance) {
+
+    const lignes = tousLesTarifs.filter(t => t.puissance === puissance);
+    if (lignes.length === 0) return {};
+
+    const dateMax = lignes.reduce((max, t) => (t.dateDebut > max ? t.dateDebut : max), lignes[0].dateDebut);
+
+    const tarifs = {};
+
+    for (const l of lignes) {
+        if (l.dateDebut === dateMax) {
+        (tarifs[l.couleur] ??= {})[l.type] = parseFloat(l.tarif);
+        }
+    }
+
+    document.getElementById("blue-hc").textContent = tarifs.BLEU?.HC;
+
+    document.getElementById("blue-hp").textContent = tarifs.BLEU?.HP;
+
+
+    document.getElementById("white-hc").textContent = tarifs.BLANC?.HC;
+
+    document.getElementById("white-hp").textContent = tarifs.BLANC?.HP;
+
+
+    document.getElementById("red-hc").textContent = tarifs.ROUGE?.HC;
+
+    document.getElementById("red-hp").textContent = tarifs.ROUGE?.HP;
+
+}
+
+
+listePuissances.addEventListener("change", (event) => {
+    puissanceChoisie = Number(event.target.value);
+    afficherTarifs(puissanceChoisie);
+    afficherTarifsRecents(puissanceChoisie);
+});
 
 /*
  * Formatage des dates
@@ -51,119 +179,168 @@ function formatDate(date) {
         return "--/--/----";
     }
 
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return `${parts[0]}/${parts[1]}/${parts[2]}`;
 }
 
 
-/*
- * Affichage des tarifs
- */
 
-function displayTariffs() {
+// Associe chaque courbe à sa couleur Tempo
+function trouverGroupe(index) {
+    const cle = Object.keys(INDEX_DATASETS)
+        .find(cle => INDEX_DATASETS[cle] === index);
 
-    document.getElementById("blue-hc").textContent =
-        tariffData.blue.hc;
-
-    document.getElementById("blue-hp").textContent =
-        tariffData.blue.hp;
-
-
-    document.getElementById("white-hc").textContent =
-        tariffData.white.hc;
-
-    document.getElementById("white-hp").textContent =
-        tariffData.white.hp;
-
-
-    document.getElementById("red-hc").textContent =
-        tariffData.red.hc;
-
-    document.getElementById("red-hp").textContent =
-        tariffData.red.hp;
-
-
-    document.getElementById("subscribed-power").textContent =
-        tariffData.subscribedPower;
-}
-
-
-/*
- * Mise à jour de la période affichée
- */
-
-function updatePeriod() {
-
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value;
-
-    if (!startDate || !endDate) {
-        return;
+    if (!cle) {
+        return [];
     }
 
-    if (startDate > endDate) {
-        alert("La date de début doit être antérieure à la date de fin.");
-        return;
-    }
+    const couleur = cle.split('_')[0];
 
-    const periodText =
-        `${formatDate(startDate)} → ${formatDate(endDate)}`;
-
-    document.getElementById("selected-period").textContent =
-        periodText;
-
-    document.getElementById("chart-period").textContent =
-        periodText;
-
-
-    /*
-     * Plus tard :
-     *
-     * fetch(`/api/tarifs?debut=${startDate}&fin=${endDate}`)
-     *
-     * permettra de récupérer les tarifs historiques
-     * depuis l'API Symfony.
-     */
-
-    displayTariffs();
+    return Object.keys(INDEX_DATASETS)
+        .filter(cle => cle.startsWith(couleur + '_'))
+        .map(cle => INDEX_DATASETS[cle]);
 }
 
+// Met en évidence une ou plusieurs courbes
+function mettreEnEvidence(chart, indicesActifs) {
+    chart.data.datasets.forEach((dataset, index) => {
+        const actif = indicesActifs === null
+            || indicesActifs.includes(index);
 
-/*
- * Bouton "Afficher"
- */
+        const couleur = COULEURS_ORIGINALES[index];
+        const couleurAffichee = actif
+            ? couleur
+            : couleur + '33';
 
-applyButton.addEventListener("click", updatePeriod);
+        // Ligne
+        dataset.borderColor = couleurAffichee;
+        dataset.borderWidth = actif ? 4 : 2;
+
+        // Points
+        dataset.pointBackgroundColor = couleurAffichee;
+        dataset.pointBorderColor = couleurAffichee;
+
+        // Point survolé
+        dataset.pointHoverBackgroundColor = couleur;
+        dataset.pointHoverBorderColor = couleur;
+    });
+
+    chart.update('none');
+}
+
+const chart = new Chart(canvas, {
+    type: 'line',
+
+    data: {
+        labels: [],
+
+        datasets: [
+            // Bleu
+            {
+                label: 'Bleu HC',
+                data: [],
+                borderColor: '#4385d8',
+                tension: 0.2
+            },
+            {
+                label: 'Bleu HP',
+                data: [],
+                borderColor: '#4385d8',
+                borderDash: [5, 5],
+                tension: 0.2
+            },
+
+            // Blanc
+            {
+                label: 'Blanc HC',
+                data: [],
+                borderColor: '#999999',
+                tension: 0.2
+            },
+            {
+                label: 'Blanc HP',
+                data: [],
+                borderColor: '#999999',
+                borderDash: [5, 5],
+                tension: 0.2
+            },
+
+            // Rouge
+            {
+                label: 'Rouge HC',
+                data: [],
+                borderColor: '#d9534f',
+                tension: 0.2
+            },
+            {
+                label: 'Rouge HP',
+                data: [],
+                borderColor: '#d9534f',
+                borderDash: [5, 5],
+                tension: 0.2
+            }
+        ]
+    },
+
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        // Survol d'une ligne du graphique
+        onHover: (event, elements, chart) => {
+            if (elements.length > 0) {
+                const index = elements[0].datasetIndex;
+                mettreEnEvidence(chart, trouverGroupe(index));
+            } else {
+                mettreEnEvidence(chart, null);
+            }
+        },
+
+        plugins: {
+            legend: {
+                onHover: (event, item, legend) => {
+                    mettreEnEvidence(
+                        legend.chart,
+                        trouverGroupe(item.datasetIndex)
+                    );
+                },
+
+                onLeave: (event, item, legend) => {
+                    mettreEnEvidence(legend.chart, null);
+                }
+            }
+        },
+
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Prix (€/kWh)'
+                }
+            },
+
+            x: {
+                title: {
+                    display: true,
+                    text: 'Date'
+                }
+            }
+        },
+        interaction: {
+            mode: 'nearest',
+            intersect: false,
+            axis: 'xy'
+        },
+    }
+});
+
+chart.data.datasets.forEach((dataset, index) => {
+    COULEURS_ORIGINALES[index] = dataset.borderColor;
+});
 
 
-/*
- * Dates par défaut :
- * début de l'année jusqu'à aujourd'hui.
- */
-
-const today = new Date();
-
-const year = today.getFullYear();
-
-const firstDayOfYear =
-    `${year}-01-01`;
-
-const currentDate =
-    today.toISOString().split("T")[0];
-
-startDateInput.value = firstDayOfYear;
-endDateInput.value = currentDate;
 
 
-/*
- * Date de dernière mise à jour temporaire.
- */
-
-document.getElementById("last-update").textContent =
-    today.toLocaleDateString("fr-FR");
 
 
-/*
- * Initialisation
- */
 
-updatePeriod();

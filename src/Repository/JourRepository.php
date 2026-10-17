@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Jour;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -31,13 +32,14 @@ class JourRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Jour
-//    {
-//        return $this->createQueryBuilder('j')
-//            ->andWhere('j.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByPeriode(\DateTimeInterface $debut, \DateTimeInterface $fin): array
+        {
+            return $this->createQueryBuilder('j')
+                ->andWhere('j.dateJour BETWEEN :debut AND :fin')
+                ->setParameter('debut', $debut, Types::DATE_MUTABLE)
+                ->setParameter('fin', $fin, Types::DATE_MUTABLE)
+                ->orderBy('j.dateJour', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
 }

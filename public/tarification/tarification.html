@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="../common/header.css">
     <link rel="stylesheet" href="tarification.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="../common/header.js" defer></script>
     <script src="tarification.js" defer></script>
 </head>
@@ -20,56 +22,63 @@
 
 <main class="main-container">
 
-    <!-- En-tête -->
+    <!-- Informations complémentaires -->
 
-    <section class="page-header">
+    <section class="section">
 
-        <h1>Tarifs de l'électricité</h1>
+        <h2 class="section-title">
+            Informations sur les tarifs
+        </h2>
 
-        <p>
-            Consultez l'évolution des tarifs de l'électricité et du tarif Tempo.
-        </p>
+        <div class="information-grid">
 
-    </section>
+            <div class="information-item">
+
+                <span class="information-label">
+                    Heures creuses
+                </span>
+
+                <strong id="off-peak-hours">
+                    22h00 → 06h00
+                </strong>
+
+            </div>
 
 
-    <!-- Sélection de période -->
+            <div class="information-item">
 
-    <section class="period-selector">
+                <label for="subscribed-power" class="information-label">
+                    Puissance souscrite
+                </label>
 
-        <div class="date-field">
-            <label for="start-date">Date de début</label>
-            <input type="date" id="start-date">
+                <select id="subscribed-power" class="power-select"></select>
+
+            </div>
+
+
+            <div class="information-item">
+
+                <span class="information-label">
+                    Dernière mise à jour
+                </span>
+
+                <strong id="last-update">
+                    --/--/----
+                </strong>
+
+            </div>
+
         </div>
 
-        <div class="date-field">
-            <label for="end-date">Date de fin</label>
-            <input type="date" id="end-date">
-        </div>
-
-        <button id="apply-period" class="button">
-            Afficher
-        </button>
 
     </section>
-
-
-    <!-- Période sélectionnée -->
-
-    <div class="selected-period">
-        Période :
-        <strong id="selected-period">
-            --/--/---- → --/--/----
-        </strong>
-    </div>
-
 
     <!-- Tarif actuel -->
 
     <section class="section">
 
         <h2 class="section-title">
-            Grille tarifaire
+            Grille tarifaire aujourd'hui
         </h2>
 
         <div class="tariff-table-container">
@@ -152,44 +161,14 @@
                 Évolution des tarifs
             </h2>
 
-            <span id="chart-period">
+             <span id="chart-period">
                 --/--/---- → --/--/----
             </span>
 
         </div>
 
-
         <div class="chart-container">
-
-            <div class="chart-placeholder">
-
-                <div class="chart-y-axis">
-                    <span>1,50 €</span>
-                    <span>1,20 €</span>
-                    <span>0,90 €</span>
-                    <span>0,60 €</span>
-                    <span>0,30 €</span>
-                    <span>0 €</span>
-                </div>
-
-
-                <div class="chart-area">
-
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-                    <div class="chart-grid-line"></div>
-
-                    <div class="chart-message">
-                        Graphique d'évolution des tarifs
-                    </div>
-
-                </div>
-
-            </div>
-
+            <canvas id="tariff-chart"></canvas>
         </div>
 
     </section>
@@ -252,57 +231,7 @@
     </section>
 
 
-    <!-- Informations complémentaires -->
 
-    <section class="section">
-
-        <h2 class="section-title">
-            Informations sur les tarifs
-        </h2>
-
-        <div class="information-grid">
-
-            <div class="information-item">
-
-                <span class="information-label">
-                    Heures creuses
-                </span>
-
-                <strong id="off-peak-hours">
-                    22h00 → 06h00
-                </strong>
-
-            </div>
-
-
-            <div class="information-item">
-
-                <span class="information-label">
-                    Puissance souscrite
-                </span>
-
-                <strong>
-                    <span id="subscribed-power">---</span> kVA
-                </strong>
-
-            </div>
-
-
-            <div class="information-item">
-
-                <span class="information-label">
-                    Dernière mise à jour
-                </span>
-
-                <strong id="last-update">
-                    --/--/----
-                </strong>
-
-            </div>
-
-        </div>
-
-    </section>
 
 </main>
 

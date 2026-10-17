@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Production PV - Import</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0&icon_names=sync&display=block"/>
 
     <link rel="stylesheet" href="../common/header.css">
     <link rel="stylesheet" href="import.css">
+
 
     <script src="../common/header.js" defer></script>
     <script src="import.js" defer></script>
@@ -22,13 +25,7 @@
 
     <section class="page-header">
 
-        <div>
-            <h1>Import des données</h1>
-
-            <p>
-                Importez un fichier CSV contenant les données de votre installation.
-            </p>
-        </div>
+        <h1>Import des données</h1>
 
         <a href="../login/login.html" class="logout-button">
             Se déconnecter
@@ -106,7 +103,15 @@
 
     <section class="history-section">
 
-        <h2>Derniers imports</h2>
+        <section class="history-section">
+
+        <div class="history-header">
+            <h2>Derniers imports</h2>
+
+            <button id="refresh-imports" class="refresh-button" type="button" title="Actualiser les imports" aria-label="Actualiser les imports" >
+                <span class="material-symbols-outlined" aria-hidden="true"> sync </span>
+            </button>
+        </div>
 
         <div class="history-table-container">
 
@@ -121,10 +126,10 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="history-table-content">
 
                     <tr>
-                        <td colspan="3" class="empty-history">
+                        <td colspan="4" class="empty-history">
                             Aucun import récent
                         </td>
                     </tr>

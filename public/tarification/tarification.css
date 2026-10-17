@@ -15,24 +15,6 @@ body {
     margin: 40px auto;
 }
 
-
-/* En-tête */
-
-.page-header {
-    margin-bottom: 30px;
-}
-
-.page-header h1 {
-    margin: 0 0 8px;
-    font-size: 32px;
-}
-
-.page-header p {
-    margin: 0;
-    color: #666;
-}
-
-
 /* Sélection période */
 
 .period-selector {
@@ -214,53 +196,20 @@ body {
     border-radius: 10px;
 }
 
-.chart-placeholder {
-    display: flex;
-    height: 350px;
-}
-
-.chart-y-axis {
-    width: 70px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    padding-right: 10px;
-
-    color: #777;
-    font-size: 12px;
-    text-align: right;
-}
-
-.chart-area {
+.chart-container {
     position: relative;
+    height: 400px;
+    padding: 20px;
 
-    flex: 1;
-
-    border-left: 1px solid #bbb;
-    border-bottom: 1px solid #bbb;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
 }
 
-.chart-grid-line {
+#tariff-chart {
     width: 100%;
-    height: 16.66%;
-
-    border-top: 1px dashed #ddd;
+    height: 100%;
 }
-
-.chart-message {
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-
-    color: #999;
-    font-size: 15px;
-}
-
 
 /* Explications Tempo */
 
@@ -327,6 +276,36 @@ body {
 
 .information-item strong {
     font-size: 17px;
+}
+
+.power-select {
+    width: fit-content;
+    min-width: 90px;
+    height: 30px;
+    padding: 0 22px 0 2px;
+
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+
+    color: #222;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.power-select:hover {
+    background-color: #f5f6f8;
+    border-color: #ddd;
+}
+
+.power-select:focus {
+    outline: none;
+    border-color: #4385d8;
+    background-color: white;
 }
 
 
