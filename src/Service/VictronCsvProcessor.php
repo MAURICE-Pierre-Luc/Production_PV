@@ -667,13 +667,13 @@ class VictronCsvProcessor
         // Consommation du réseau
         $jour->setEnergieImporteeHC(
             $this->donneesJour['import']['energie_importe_hc'] !== null
-                ? (string) $this->donneesJour['consommation']['energie_importe_hc']
+                ? (string) $this->donneesJour['import']['energie_importe_hc']
                 : null
         );
 
         $jour->setEnergieImporteeHP(
             $this->donneesJour['import']['energie_importe_hp'] !== null
-                ? (string) $this->donneesJour['consommation']['energie_importe_hp']
+                ? (string) $this->donneesJour['import']['energie_importe_hp']
                 : null
         );
 
