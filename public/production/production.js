@@ -27,7 +27,6 @@ async function getDataPeriod(dateDebut, dateFin){
             console.log("La liste des jours est vide");
         }else{
             
-            console.log(resultat);
             dataPeriod = resultat;
 
         }
@@ -54,7 +53,6 @@ async function getTarifsPeriod(dateDebut, dateFin){
             console.log("La liste de tarifs est vide");
         }else{
 
-            console.log(resultat);
             tarifPeriod = resultat;
             
         }
@@ -82,15 +80,25 @@ function globalview(){
     let totalImporteElement = document.getElementById('imported');
 
     var totalProduction = 0;
-
     var totalConsommation = 0;
+    var totalImporte = 0;
+    var totalAutoConsomation = 0;
 
     dataPeriod.forEach(element => {
         
         totalProduction =+ (element['production']['energieHC'] + element['production']['energieHP']);
-
-        totalConsommation =+ (element['production']['energieHC'] + element['production']['energieHP']);
-
+        totalConsommation =+ (element['production']['energieConsommeeHC'] + element['production']['energieConsommeeHP']);
+        totalImporte =+ (element['reseau']['energieImporteeHC'] + element['reseau']['energieImporteeHP'])
+        
     });
+
+    totalAutoConsomation = totalConsommation - totalImporte;
+
+    totalProductionElement.innerText = totalProduction;
+    totalConsommationElement.innerText = totalConsommation;
+    totalAutoConsomationElement.innerText = totalAutoConsomation;
+    totalImporteElement = totalImporte;
+
+
 }
 
