@@ -103,11 +103,11 @@ function globalview(){
         
     });
 
-    console.log(totalProduction);
-    console.log(totalConsommation);
-    console.log(totalImporte);
 
-    totalAutoConsomation = totalConsommation - totalImporte;
+    totalProduction = Math.trunc(totalProduction * 100) / 100;
+    totalConsommation = Math.trunc(totalConsommation * 100) / 100;
+    totalImporte = Math.trunc(totalImporte * 100) / 100;
+    totalAutoConsomation = Math.trunc((totalConsommation - totalImporte * 100))/100;
 
     totalProductionElement.textContent = totalProduction;
     totalConsommationElement.textContent = totalConsommation;
