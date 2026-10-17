@@ -157,14 +157,53 @@ const chartGlobalView = new Chart(document.getElementById('chart-overview'), {
     },
     options: {
         responsive: true,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-            legend: { position: 'bottom' },
-            tooltip: { callbacks: { label: (c) => `${c.dataset.label} : ${c.parsed.y.toFixed(2)} kWh` } }
+        maintainAspectRatio: false,
+
+        // Survol d'une ligne du graphique
+        onHover: (event, elements, chart) => {
+            if (elements.length > 0) {
+                const index = elements[0].datasetIndex;
+                mettreEnEvidence(chart, trouverGroupe(index));
+            } else {
+                mettreEnEvidence(chart, null);
+            }
         },
+
+        plugins: {
+            legend: {
+                onHover: (event, item, legend) => {
+                    mettreEnEvidence(
+                        legend.chart,
+                        trouverGroupe(item.datasetIndex)
+                    );
+                },
+
+                onLeave: (event, item, legend) => {
+                    mettreEnEvidence(legend.chart, null);
+                }
+            }
+        },
+
         scales: {
-            y: { beginAtZero: true, title: { display: true, text: 'kWh' } },
-            x: { ticks: { maxTicksLimit: 6 } }
-        }
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Prix (€/kWh)'
+                }
+            },
+
+            x: {
+                title: {
+                    display: true,
+                    text: 'Date'
+                }
+            }
+        },
+        interaction: {
+            mode: 'nearest',
+            intersect: false,
+            axis: 'xy'
+        },
     }
 });
