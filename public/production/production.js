@@ -89,9 +89,9 @@ function globalview(){
     var totalImporte = 0;
     var totalAutoConsomation = 0;
 
-    console.log(dataPeriod['production']['energieHC']);
-    console.log(dataPeriod['production']['energieConsommeeHC']);
-    console.log(dataPeriod['reseau']['energieImporteeHC']);
+    console.log(dataPeriod[0]['production']['energieHC']);
+    console.log(dataPeriod[0]['production']['energieConsommeeHC']);
+    console.log(dataPeriod[0]['reseau']['energieImporteeHC']);
 
     dataPeriod.forEach(element => {
         
