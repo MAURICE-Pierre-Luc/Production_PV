@@ -6,7 +6,7 @@ const API_URL = "/api/grille-tarifaire";
 
 
 const canvas = document.getElementById('tariff-chart');
-const listePuissances =  document.getElementById('subscribed-power');
+const listePuissances = document.getElementById('subscribed-power');
 const dateMAJ = document.getElementById('last-update');
 const spanPeriode = document.getElementById('chart-period')
 
@@ -31,8 +31,8 @@ const COULEURS_ORIGINALES = {};
 
 getTarifs();
 
-async function getTarifs(){
-    try{
+async function getTarifs() {
+    try {
         const response = await fetch(`${API_URL}/tarifs`)
         const resultat = await response.json();
 
@@ -43,9 +43,9 @@ async function getTarifs(){
                 || `Erreur HTTP ${response.status}`
             );
         }
-        if(resultat.length === 0){
+        if (resultat.length === 0) {
             console.log("La liste de tarifs est vide");
-        }else{
+        } else {
 
             tousLesTarifs = resultat;
 
@@ -53,9 +53,9 @@ async function getTarifs(){
             afficherDates();
             ajouterPuissances();
             afficherTarifsRecents(puissanceDefaut);
-            
+
         }
-    } catch (error)  {
+    } catch (error) {
         console.error("Erreur lors de la récupération des imports :", error);
     }
 }
@@ -71,12 +71,12 @@ function afficherTarifs(puissance) {
     tarifs.forEach(t => {
         const cle = `${t.couleur.toUpperCase()}_${t.type.toUpperCase()}`;
 
-        if (!(cle in INDEX_DATASETS)){
-            
+        if (!(cle in INDEX_DATASETS)) {
+
             console.log(`Combinaison inconnue ${cle}`)
             return; // combinaison inconnue : on ignore
         }
-        
+
         if (!parDate[t.dateDebut]) {
             parDate[t.dateDebut] = {};
         }
@@ -98,7 +98,7 @@ function afficherTarifs(puissance) {
     chart.update();
 }
 
-function afficherDates(){
+function afficherDates() {
 
     dateMin = tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null);
 
@@ -110,7 +110,7 @@ function afficherDates(){
 
 }
 
-function ajouterPuissances(){
+function ajouterPuissances() {
 
     puissances = [...new Set(tousLesTarifs.map(t => t.puissance))].filter(p => p !== null).sort((a, b) => a - b);
 
@@ -136,7 +136,7 @@ function afficherTarifsRecents(puissance) {
 
     for (const l of lignes) {
         if (l.dateDebut === dateMax) {
-        (tarifs[l.couleur] ??= {})[l.type] = parseFloat(l.tarif);
+            (tarifs[l.couleur] ??= {})[l.type] = parseFloat(l.tarif);
         }
     }
 
