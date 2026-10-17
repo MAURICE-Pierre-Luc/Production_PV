@@ -79,6 +79,9 @@ document.getElementById('apply-period').addEventListener("click", async () => {
 
 
 function globalview() {
+
+    chartGlobalView.data.datasets.forEach(dataset => { dataset.data = []; });
+
     let totalProductionElement = document.getElementById('production');
     let totalConsommationElement = document.getElementById('consumption');
     let totalAutoConsommationElement = document.getElementById('self-kwh');
@@ -87,7 +90,7 @@ function globalview() {
     var totalProduction = 0;
     var totalConsommation = 0;
     var totalImport = 0;
-    var totalAutoConsomation = 0;
+    var totalAutoConsommation = 0;
 
     let dailyProduction = 0;
     let dailyConsommation = 0;
@@ -105,12 +108,17 @@ function globalview() {
         totalConsommation += dailyConsommation;
         totalImport += dailyImport;
 
-
+        chartGlobalView.data.labels.push(element.dateJour);
+        chartGlobalView.data.datasets[0].data.push(dailyProduction);
+        chartGlobalView.data.datasets[1].data.push(dailyConsommation);
+        chartGlobalView.data.datasets[2].data.push(dailyImport);
+        chartGlobalView.data.datasets[3].data.push(dailyAutoConsommation);
 
 
 
     });
 
+    chart.update();
 
     totalProduction = Math.trunc(totalProduction * 100) / 100;
     totalConsommation = Math.trunc(totalConsommation * 100) / 100;
