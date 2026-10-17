@@ -100,9 +100,9 @@ function afficherTarifs(puissance) {
 
 function afficherDates() {
 
-    dateMin = tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null);
+    dateMin = new Date(tousLesTarifs.reduce((min, t) => !min || t.dateDebut < min ? t.dateDebut : min, null));
 
-    dateMax = tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null);
+    dateMax = new Date(tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null));
 
     console.log(dateMin);
     console.log(dateMax);
