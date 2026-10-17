@@ -104,9 +104,9 @@ function afficherDates() {
 
     dateMax = tousLesTarifs.some(t => t.dateFin === null) ? null : tousLesTarifs.reduce((max, t) => !max || t.dateFin > max ? t.dateFin : max, null);
 
-    dateMAJ.textContent = formatDate(dateMax);
+    dateMAJ.textContent = dateMax.toLocaleDateString('fr-FR');
 
-    spanPeriode.textContent = `${formatDate(dateMin)} → ${formatDate(dateMax)}`;
+    spanPeriode.textContent = `${dateMin.toLocaleDateString('fr-FR')} → ${dateMax.toLocaleDateString('fr-FR')}`;
 
 }
 
@@ -162,25 +162,6 @@ listePuissances.addEventListener("change", (event) => {
     afficherTarifs(puissanceChoisie);
     afficherTarifsRecents(puissanceChoisie);
 });
-
-/*
- * Formatage des dates
- */
-
-function formatDate(date) {
-
-    if (!date) {
-        return "--/--/----";
-    }
-
-    const parts = date.split("-");
-
-    if (parts.length !== 3) {
-        return "--/--/----";
-    }
-
-    return `${parts[0]}/${parts[1]}/${parts[2]}`;
-}
 
 
 
