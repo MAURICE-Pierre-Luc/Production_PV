@@ -90,13 +90,15 @@ function globalview(){
     var totalAutoConsomation = 0;
 
     console.log(dataPeriod[0]['production']['energieHC']);
-    console.log(dataPeriod[0]['production']['energieConsommeeHC']);
+    console.log(dataPeriod[0]['consommation']['energieConsommeeHC']);
     console.log(dataPeriod[0]['reseau']['energieImporteeHC']);
 
     dataPeriod.forEach(element => {
-        
+
+        console.log(element);
+
         totalProduction =+ (element['production']['energieHC'] + element['production']['energieHP']);
-        totalConsommation =+ (element['production']['energieConsommeeHC'] + element['production']['energieConsommeeHP']);
+        totalConsommation =+ (element['consommation']['energieConsommeeHC'] + element['consommation']['energieConsommeeHP']);
         totalImporte =+ (element['reseau']['energieImporteeHC'] + element['reseau']['energieImporteeHP'])
         
     });
