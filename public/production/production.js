@@ -185,21 +185,10 @@ const chartGlobalView = new Chart(document.getElementById('chart-overview'), {
         },
 
         scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Prix (€/kWh)'
-                }
-            },
-
-            x: {
-                title: {
-                    display: true,
-                    text: 'Date'
-                }
-            }
+            y: { beginAtZero: true, title: { display: true, text: 'kWh' } },
+            x: { ticks: { maxTicksLimit: 6 } }
         },
+        
         interaction: {
             mode: 'nearest',
             intersect: false,
