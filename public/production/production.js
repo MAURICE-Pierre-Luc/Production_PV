@@ -86,6 +86,13 @@ document.getElementById('apply-period').addEventListener("click", async () => {
 })
 
 
+
+document.querySelectorAll('.tab').forEach((btn) => btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach((b) => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.tab-panel').forEach((p) => p.classList.toggle('active', p.id === 'panel-' + btn.dataset.tab));
+}));
+
+
 function globalview() {
 
     chartGlobalView.data.datasets.forEach(dataset => { dataset.data = []; });
@@ -94,8 +101,8 @@ function globalview() {
     let totalConsommationElement = document.getElementById('consumption');
     let totalAutoConsommationElement = document.getElementById('self-kwh');
     let totalImportElement = document.getElementById('imported');
-    let averageDailyProductionElement =  document.getElementById('average-production');
-    let maximumDayProductionElement =  document.getElementById('max-production');
+    let averageDailyProductionElement = document.getElementById('average-production');
+    let maximumDayProductionElement = document.getElementById('max-production');
     let bestProductionDayElement = document.getElementById('best-day');
     let autoConsommationElement = document.getElementById('self-consumption');
 
@@ -129,7 +136,7 @@ function globalview() {
         chartGlobalView.data.datasets[2].data.push(dailyImport);
         chartGlobalView.data.datasets[3].data.push(dailyAutoConsommation);
 
-        if(dailyProduction > maxProduction){
+        if (dailyProduction > maxProduction) {
             maxProduction = dailyProduction;
             bestProductionDay = new Date(element.dateJour);
         }
@@ -148,10 +155,10 @@ function globalview() {
     totalAutoConsommationElement.textContent = totalAutoConsommation;
     totalImportElement.textContent = totalImport;
 
-    averageDailyProductionElement.textContent = Math.trunc((totalProduction/dataPeriod.length) * 100) / 100;
+    averageDailyProductionElement.textContent = Math.trunc((totalProduction / dataPeriod.length) * 100) / 100;
     maximumDayProductionElement.textContent = maxProduction;
     bestProductionDayElement.textContent = bestProductionDay.toLocaleDateString('fr-FR');
-    autoConsommationElement.textContent = Math.trunc((totalProduction/totalConsommation) * 100 * 100) / 100;
+    autoConsommationElement.textContent = Math.trunc((totalProduction / totalConsommation) * 100 * 100) / 100;
 
 }
 
