@@ -106,31 +106,19 @@
             <section class="section">
                 <h2>Paramètres de calcul</h2>
                 <form class="params" onsubmit="return false">
-                    <label>Puissance de l'abonnement<select data-param="puissance"></select></label>
-                    <p class="price-box">Prix HC : <strong class="price-hc">---</strong> €/kWh · Prix HP : <strong
-                            class="price-hp">---</strong> €/kWh<br><span>Tarifs récupérés via l'API pour cet
-                            abonnement</span></p>
+                    <label>Puissance de l'abonnement<select data-param="puissance" id="liste-puiss-renta"></select></label>
                 </form>
             </section>
             <section class="stats-grid" id="kpi-profit"></section>
             <section class="section charts-grid">
-                <div class="chart-container" id="chart-profit-split"></div>
-                <div class="chart-container" id="chart-mix-profit"></div>
-                <div class="chart-container" id="chart-cumul"></div>
+                <div class="chart-container"><canvas id="chart-profit-split"></canvas></div>
+                <div class="chart-container"><canvas id="chart-mix-profit"></canvas></div>
+                <div class="chart-container"><canvas id="chart-cumul"></canvas></div>
             </section>
         </div>
 
         <!-- ===== Autonomie ===== -->
         <div class="tab-panel" id="panel-autonomy">
-            <section class="section">
-                <h2>Paramètres de calcul</h2>
-                <form class="params" onsubmit="return false">
-                    <label>Puissance de l'abonnement<select data-param="puissance"></select></label>
-                    <p class="price-box">Prix HC : <strong class="price-hc">---</strong> €/kWh · Prix HP : <strong
-                            class="price-hp">---</strong> €/kWh<br><span>Tarifs récupérés via l'API pour cet
-                            abonnement</span></p>
-                </form>
-            </section>
             <section class="stats-grid" id="kpi-autonomy"></section>
             <section class="section">
                 <h2>Autoconsommation sur la période</h2>
