@@ -221,8 +221,6 @@ function rentabilityView(puissance) {
         dailyConsommationHP = Number(element.consommation.energieConsommeeHP ?? 0);
         dailyImportHP = Number(element.reseau.energieImporteeHP ?? 0);
         dailyAutoConsommationHP = Math.trunc((dailyConsommationHP - dailyImportHP) * 100) / 100;
-
-        // A adapter selon le nom réel des champs VE dans tes données
         dailyVEHC = Number(element.vehiculeElectrique.energieHC ?? 0);
         dailyVEHP = Number(element.vehiculeElectrique.energieHP ?? 0);
 
@@ -234,6 +232,8 @@ function rentabilityView(puissance) {
         dailyCostCosnommation = Number(dailyConsommationHC * tarifHC) + Number(dailyConsommationHP * tarifHP);
         dailyCostImport = Number(dailyImportHC * tarifHC) + Number(dailyImportHP * tarifHP);
         dailyCostAutoConsommation = Number(dailyAutoConsommationHC * tarifHC) + Number(dailyAutoConsommationHP * tarifHP);
+        dailyCostVE = Number(dailyVEHC * tarifHC) + Number(dailyVEHP * tarifHP);
+
 
         // Graphique journalier (barres empilées)
         labels.push(element.dateJour);
