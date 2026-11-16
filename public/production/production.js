@@ -76,6 +76,7 @@ document.getElementById('apply-period').addEventListener("click", async () => {
     globalView();
     rentabilityView();
     autonomyView();
+    ajouterPuissances();
 })
 
 
